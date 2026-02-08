@@ -30,7 +30,7 @@ export default function Home() {
         <div className="max-w-2xl px-2">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-sans tracking-tighter text-center">A free, open source <span className="text-[blue]">font editor</span></h1>
           <div className="flex flex-col font-inter text-sm mt-6 max-w-[60ch]">
-            <p><span className="font-semibold font-inter">Built from scratch with TypeScript and Rust.</span> Shift is cross platform, fast, and simple to use.</p>
+            <p><span className="font-semibold font-inter">Built from scratch with TypeScript and Rust.</span> Shift is cross platform, and aims to be fast, and simple to use.</p>
           </div>
         </div>
 
