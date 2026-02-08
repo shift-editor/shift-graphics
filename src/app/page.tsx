@@ -27,15 +27,15 @@ export default function Home() {
       </nav>
 
       <main className="flex-1 flex flex-col gap-4 justify-center items-center">
-        <div className="max-w-2xl px-2">
+        <div className="max-w-2xl px-2 mt-8 sm:m-0">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-sans tracking-tighter text-center">A free, open source <span className="text-[blue]">font editor</span></h1>
           <div className="flex flex-col font-inter text-sm mt-6 max-w-[60ch]">
             <p><span className="font-semibold font-inter">Built from scratch with TypeScript and Rust.</span> Shift is cross platform, and aims to be fast, and simple to use.</p>
           </div>
         </div>
 
-        <div className="max-w-2xl px-2">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-6">
+        <div className="max-w-2xl px-2 flex justify-center items-center">
+          <div className="flex sm:flex-row items-center justify-center gap-3 sm:mt-4">
             <Link
               href="https://github.com/shift-editor/shift"
               target="_blank"
@@ -56,7 +56,7 @@ export default function Home() {
         </div>
 
         <ImageCarousel />
-        <div className="w-full max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12 mt-10 px-2 mb-20">
+        <div className="w-full max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12 sm:mt-10 px-2 mb-20">
           <div>
             <h2 className="font-sans font-semibold text-sm tracking-tight mb-2">TypeScript & Canvas</h2>
             <p className="font-inter text-sm text-neutral-600 leading-relaxed">Built with TypeScript, React, and fast Canvas 2D rendering. Shift runs on Electron, giving you a native desktop app with the flexibility of the web platform.</p>
@@ -71,7 +71,7 @@ export default function Home() {
 
       <footer className="flex flex-col items-center">
         <div className="w-full">
-          <div className="w-full flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-0 font-mono font-thin text-[0.6rem]">
+          <div className="w-full flex flex-col-reverse sm:flex-row justify-between items-start gap-3 sm:gap-0 font-mono font-thin text-[0.6rem]">
             <div className="flex flex-col gap-1">
               <p className="font-mono font-normal uppercase"> <span className="font-sans">©</span> designed and engineered by kostya farber.</p>
               <p><span className="font-sans font-medium">{`${new Date().getFullYear()}`}</span></p>

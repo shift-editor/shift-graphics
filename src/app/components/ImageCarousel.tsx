@@ -63,7 +63,7 @@ export function ImageCarousel() {
                 fill
                 className="object-contain"
                 unoptimized
-                priority={i === 0}
+                priority
               />
             </Tabs.Panel>
           ))}
