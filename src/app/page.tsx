@@ -30,12 +30,18 @@ export default function Home() {
         <div className="max-w-2xl px-2 mt-8 sm:m-0">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-sans tracking-tighter text-center">A free, open source <span className="text-[blue]">font editor</span></h1>
           <div className="flex flex-col font-inter text-sm mt-6 max-w-[60ch]">
-            <p><span className="font-semibold font-inter">Built from scratch with TypeScript and Rust.</span> Shift is cross platform, and aims to be fast, and simple to use.</p>
+            <p className="font-inter">Shift is a fast font editor built from scratch with TypeScript and Rust. Open source, cross-platform, and easy to use.</p>
           </div>
         </div>
 
         <div className="max-w-2xl px-2 flex justify-center items-center">
-          <div className="flex sm:flex-row items-center justify-center gap-3 sm:mt-4">
+          <div className="flex flex-wrap sm:flex-row items-center justify-center gap-3 sm:mt-4">
+            <Link
+              href="#waitlist"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[blue] text-white text-xs font-medium rounded-lg hover:opacity-90 transition-opacity"
+            >
+              Join the waitlist
+            </Link>
             <Link
               href="https://github.com/shift-editor/shift"
               target="_blank"
