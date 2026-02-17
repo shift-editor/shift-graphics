@@ -36,18 +36,18 @@ export default function Home() {
 
         <div className="max-w-2xl px-2 flex justify-center items-center">
           <div className="flex flex-wrap sm:flex-row items-center justify-center gap-3 sm:mt-4">
-            <Link
+            <a
               href="#waitlist"
               className="inline-flex items-center gap-2 px-5 py-2.5 bg-[blue] text-white text-xs font-medium rounded-lg hover:opacity-90 transition-opacity"
             >
               Join the waitlist
-            </Link>
+            </a>
             <Link
               href="https://github.com/shift-editor/shift"
               target="_blank"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-neutral-900 text-white text-xs font-medium rounded-lg hover:bg-neutral-800 transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 border border-neutral-300 text-xs font-medium rounded-lg hover:bg-neutral-100 transition-colors"
             >
-              <GithubIcon className="h-4 w-auto text-white" aria-hidden />
+              <GithubIcon className="h-4 w-auto" aria-hidden />
               Star on GitHub
             </Link>
             <Link
@@ -62,7 +62,10 @@ export default function Home() {
         </div>
 
         <ImageCarousel />
-        <div className="w-full max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12 sm:mt-10 px-2 mb-20">
+
+
+
+        <div className="w-full max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12 sm:mt-10 px-2 mb-14">
           <div>
             <h2 className="font-sans font-semibold text-sm tracking-tight mb-2">TypeScript & Canvas</h2>
             <p className="font-inter text-sm text-neutral-600 leading-relaxed">Built with TypeScript, React, and fast Canvas 2D rendering. Shift runs on Electron, giving you a native desktop app with the flexibility of the web platform.</p>
@@ -72,6 +75,30 @@ export default function Home() {
             <p className="font-inter text-sm text-neutral-600 leading-relaxed">Integrating with the <a href="https://github.com/googlefonts/oxidize" target="_blank" className="text-[blue] hover:underline">growing Rust font tooling ecosystem</a>, Shift aims to be a development target for new Rust based font tools and technologies.</p>
           </div>
         </div>
+
+        <section id="waitlist" className="w-full max-w-xl mx-auto px-2 mb-18">
+          <h2 className="font-sans font-semibold text-sm tracking-tight mb-4 text-center">Join the waitlist</h2>
+          <form
+            action="https://formspree.io/f/mgolyjpn"
+            method="POST"
+            className="flex flex-col sm:flex-row gap-2"
+          >
+            <input
+              type="email"
+              name="email"
+              required
+              placeholder="you@example.com"
+              className="flex-1 px-4 py-2.5 border border-neutral-300 rounded-lg text-sm font-inter placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-[blue] focus:border-transparent"
+              aria-label="Email address"
+            />
+            <button
+              type="submit"
+              className="px-5 py-2.5 bg-[blue] text-white text-xs font-medium rounded-lg hover:opacity-90 transition-opacity whitespace-nowrap"
+            >
+              Join
+            </button>
+          </form>
+        </section>
 
       </main>
 
