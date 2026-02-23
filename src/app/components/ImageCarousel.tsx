@@ -5,8 +5,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Tabs } from "@base-ui/react/tabs";
 
 const IMAGES = [
-  { src: "/grid.png", alt: "Grid view", label: "Grid View", description: "Browse and manage your full glyph set" },
-  { src: "/editor.png", alt: "Editor view", label: "Bezier Editor", description: "Edit outlines with precision bezier controls" },
+  { src: "/new-grid.png", alt: "Grid view", label: "Grid View", description: "Browse and manage your full glyph set" },
+  { src: "/new-s.png", alt: "Editor view", label: "Bezier Editor", description: "Edit outlines with precision bezier controls" },
   { src: "/fill.png", alt: "Fill view", label: "Pixel Preview", description: "Preview glyphs at low resolution" },
 ];
 
