@@ -10,7 +10,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col justify-between px-6 sm:px-12 lg:px-24 py-8">
       <nav className="flex justify-between items-center font-mono text-xs tracking-widest uppercase">
         <Link href="/">
-          <Logo className="block h-7 w-auto" aria-hidden />
+          <Logo className="block h-5 w-auto" aria-hidden />
         </Link>
 
         <div className="flex items-center gap-4">
