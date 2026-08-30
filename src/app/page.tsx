@@ -7,11 +7,13 @@ import XIcon from "./assets/x.svg";
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col justify-between px-6 sm:px-12 lg:px-24 py-8">
+    <div className="min-h-screen flex flex-col justify-between px-6 sm:px-12 lg:px-24 py-8 bg-[#e9e9e9]">
       <nav className="flex justify-between items-center font-mono text-xs tracking-widest uppercase">
-        <Link href="/">
-          <Logo className="block h-5 w-auto" aria-hidden />
-        </Link>
+        <div>
+          <Link href="/">
+            <Logo className="block h-5 w-auto" aria-hidden />
+          </Link>
+        </div>
 
         <div className="flex items-center gap-4">
           <Link href="https://github.com/shift-editor/shift" target="_blank">
@@ -28,7 +30,7 @@ export default function Home() {
 
       <main className="flex-1 flex flex-col gap-4 justify-center items-center">
         <div className="max-w-2xl px-2 mt-8 sm:m-0">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-sans tracking-tighter text-center">A free, open source <span className="text-[blue]">font editor</span></h1>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-sans tracking-tighter text-center">A free, open source <span className="text-[royalblue]">font editor</span></h1>
           <div className="flex flex-col font-inter text-sm mt-6 max-w-[60ch]">
             <p className="font-inter">Shift is a fast font editor built from scratch with TypeScript and Rust. Open source, cross-platform, and easy to use.</p>
           </div>
@@ -38,7 +40,7 @@ export default function Home() {
           <div className="flex flex-wrap sm:flex-row items-center justify-center gap-3 sm:mt-4">
             <a
               href="#waitlist"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[blue] text-white text-xs font-medium rounded-lg hover:opacity-90 transition-opacity"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[royalblue] text-white text-xs font-medium rounded-lg hover:opacity-90 transition-opacity"
             >
               Join the waitlist
             </a>
@@ -72,7 +74,7 @@ export default function Home() {
           </div>
           <div>
             <h2 className="font-sans font-semibold text-sm tracking-tight mb-2">Rust font tooling</h2>
-            <p className="font-inter text-sm text-neutral-600 leading-relaxed">Integrating with the <a href="https://github.com/googlefonts/oxidize" target="_blank" className="text-[blue] hover:underline">growing Rust font tooling ecosystem</a>, Shift aims to be a development target for new Rust based font tools and technologies.</p>
+            <p className="font-inter text-sm text-neutral-600 leading-relaxed">Integrating with the <a href="https://github.com/googlefonts/oxidize" target="_blank" className="text-[royalblue] hover:underline">growing Rust font tooling ecosystem</a>, Shift aims to be a development target for new Rust based font tools and technologies.</p>
           </div>
         </div>
 
@@ -88,12 +90,12 @@ export default function Home() {
               name="email"
               required
               placeholder="you@example.com"
-              className="flex-1 px-4 py-2.5 border border-neutral-300 rounded-lg text-sm font-inter placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-[blue] focus:border-transparent"
+              className="flex-1 bg-white px-4 py-2.5 border border-neutral-300 rounded-lg text-sm font-inter placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-[royalblue] focus:border-transparent"
               aria-label="Email address"
             />
             <button
               type="submit"
-              className="px-5 py-2.5 bg-[blue] text-white text-xs font-medium rounded-lg hover:opacity-90 transition-opacity whitespace-nowrap"
+              className="px-5 py-2.5 bg-[royalblue] text-white text-xs font-medium rounded-lg hover:opacity-90 transition-opacity whitespace-nowrap"
             >
               Join
             </button>
@@ -110,7 +112,7 @@ export default function Home() {
               <p><span className="font-sans font-medium">{`${new Date().getFullYear()}`}</span></p>
             </div>
             <div>
-              <p className="flex items-center gap-2 font-mono text-xs uppercase sm:mt-2"><span className="inline-block h-2 w-2 shrink-0 rounded-full bg-[blue]" />Currently in alpha — under active development</p>
+              <p className="flex items-center gap-2 font-mono text-xs uppercase sm:mt-2"><span className="inline-block h-2 w-2 shrink-0 rounded-full bg-[royalblue]" />Currently in alpha — under active development</p>
             </div>
           </div>
         </div>

@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { DM_Mono, Inter } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 
-const dmMono = DM_Mono({
-  variable: "--font-dm-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
-  weight: ["300", "400", "500"],
+  weight: "variable",
 });
 
 const publicSans = localFont({
@@ -47,7 +47,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${dmMono.variable} ${publicSans.variable} ${inter.variable} antialiased`}>{children}</body>
+      <body className={`${jetbrainsMono.variable} ${publicSans.variable} ${inter.variable} antialiased`}>{children}</body>
     </html>
   );
 }
