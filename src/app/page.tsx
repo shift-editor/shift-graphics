@@ -1,6 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
 import Logo from "./assets/logo.svg";
-import { ImageCarousel } from "./components/ImageCarousel";
 import GithubIcon from "./assets/github.svg";
 import DiscordIcon from "./assets/discord.svg";
 import XIcon from "./assets/x.svg";
@@ -63,8 +63,17 @@ export default function Home() {
           </div>
         </div>
 
-        <ImageCarousel />
-
+        <div className="w-full max-w-4xl mx-auto">
+          <Image
+            src="/hero.png"
+            alt="Shift font editor"
+            width={1200}
+            height={800}
+            className="w-full h-auto"
+            unoptimized
+            priority
+          />
+        </div>
 
 
         <div className="w-full max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12 sm:mt-10 px-2 mb-14">
