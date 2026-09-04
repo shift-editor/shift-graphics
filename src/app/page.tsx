@@ -28,7 +28,7 @@ export default function Home() {
         </div>
       </nav>
 
-      <main className="flex-1 flex flex-col gap-4 justify-center items-center">
+      <main className="flex-1 flex flex-col gap-4 justify-center items-center mt-18">
         <div className="max-w-2xl px-2 mt-8 sm:m-0">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-sans tracking-tighter text-center">A free, open source <span className="text-[royalblue]">font editor</span></h1>
           <div className="flex flex-col font-inter text-sm mt-6 max-w-[60ch]">
