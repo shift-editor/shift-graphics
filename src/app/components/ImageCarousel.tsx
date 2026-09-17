@@ -48,15 +48,15 @@ export function ImageCarousel() {
     <Tabs.Root
       value={index}
       onValueChange={handleValueChange}
-      className="w-full max-w-4xl mx-auto"
+      className="mx-auto w-full max-w-4xl"
     >
       <div
-        className="relative group overflow-hidden"
+        className="group relative overflow-hidden"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
         <div
-          className="relative w-full aspect-video cursor-pointer"
+          className="relative aspect-video w-full cursor-pointer"
           onClick={goToNext}
           role="button"
           tabIndex={0}
@@ -91,16 +91,16 @@ export function ImageCarousel() {
       <Tabs.List
         loopFocus
         aria-label="Image slides"
-        className="flex justify-center gap-3 mt-5"
+        className="mt-5 flex justify-center gap-3"
       >
         {IMAGES.map((img, i) => (
           <Tabs.Tab
             key={img.src}
             value={i}
             aria-label={`Go to slide ${i + 1}: ${img.label}`}
-            className="group flex flex-col items-center px-1 py-1 rounded-lg cursor-pointer transition-all duration-300"
+            className="group flex cursor-pointer flex-col items-center rounded-lg p-1 transition-all duration-300"
           >
-            <span className="w-2 h-2 rounded-full transition-all duration-300 bg-neutral-300 group-hover:bg-neutral-400 group-data-[active]:bg-neutral-900 group-data-[active]:scale-110" />
+            <span className="h-2 w-2 rounded-full bg-line transition-all duration-300 group-hover:bg-placeholder group-data-[active]:scale-110 group-data-[active]:bg-primary" />
           </Tabs.Tab>
         ))}
       </Tabs.List>
