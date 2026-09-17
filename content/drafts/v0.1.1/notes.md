@@ -3,9 +3,7 @@
 Shift is a free, open-source font editor for macOS, Windows, and Linux. Version 0.1.1 is the first alpha release.
 
 This is early software. Work on copies of your fonts, keep independent backups, and expect workflows and document details to change.
-<!-- VIDEO SLOT: Hero overview. In 15–20 seconds, open a source, choose a glyph, make one visible outline edit, and scrub a variable-font axis. -->
-
-![Editing a glyph outline in Shift](/releases/0.1.1/hero.png)
+::video{mp4="https://releases.shift.graphics/media/v0.1.1/complete-features.mp4" poster="https://releases.shift.graphics/media/v0.1.1/complete-features.jpg" label="Opening a font, browsing glyphs, editing outlines, and adjusting variable axes in Shift"}
 
 ## Open and browse
 
@@ -19,7 +17,7 @@ Use the **Pen** tool to draw straight and cubic segments, continue or close cont
 
 Deleting a point normally refits the surrounding curve instead of simply breaking the contour. Hold **Shift** while pressing **Delete** or **Backspace** when you intentionally want to leave a gap. **Undo** and **Redo** preserve these edits as complete operations.
 
-<!-- VIDEO SLOT: Outline editing. Show Pen drawing, curve insertion and bending, smooth toggling, fitted deletion, gap deletion, and undo/redo. -->
+::video{mp4="https://releases.shift.graphics/media/v0.1.1/bezier-drawing.mp4" poster="https://releases.shift.graphics/media/v0.1.1/bezier-drawing.jpg" label="Drawing and reshaping a Bézier contour with the Pen tool in Shift"}
 
 ## Transform and combine shapes
 

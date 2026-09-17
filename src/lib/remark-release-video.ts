@@ -10,19 +10,42 @@ import { visit } from "unist-util-visit";
 const allowedAttributes = new Set(["mp4", "webm", "poster", "label"]);
 const localReleaseFile =
   /^\/releases\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9/_-]+\.(?:mp4|webm|png|jpe?g|webp)$/;
+const releaseMediaOrigin = "https://releases.shift.graphics";
+const releaseMediaPathPrefix = "/media/";
 
 type Directive = ContainerDirective | LeafDirective | TextDirective;
 
-function isLocalReleaseFile(value: string, extensions: string[]) {
-  if (!localReleaseFile.test(value)) return false;
+function isAllowedReleaseMediaUrl(value: string, extensions: string[]) {
+  let url: URL;
 
-  const url = new URL(value, "https://shift.graphics");
+  if (localReleaseFile.test(value)) {
+    url = new URL(value, "https://shift.graphics");
+    if (url.pathname !== value) return false;
+  } else {
+    try {
+      url = new URL(value);
+    } catch {
+      return false;
+    }
+
+    if (
+      url.origin !== releaseMediaOrigin ||
+      url.username ||
+      url.password ||
+      url.search ||
+      url.hash ||
+      url.href !== value ||
+      !url.pathname.startsWith(releaseMediaPathPrefix) ||
+      !/^\/media\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9/_-]+\.(?:mp4|webm|png|jpe?g|webp)$/.test(
+        url.pathname,
+      )
+    ) {
+      return false;
+    }
+  }
+
   const extension = url.pathname.slice(url.pathname.lastIndexOf(".") + 1).toLowerCase();
-  return (
-    url.origin === "https://shift.graphics" &&
-    url.pathname === value &&
-    extensions.includes(extension)
-  );
+  return extensions.includes(extension);
 }
 
 export const remarkReleaseVideo: Plugin<[], Root> = () => (tree) => {
@@ -51,20 +74,20 @@ export const remarkReleaseVideo: Plugin<[], Root> = () => (tree) => {
     const poster = attributes.poster;
     const label = attributes.label;
 
-    if (typeof mp4 !== "string" || !isLocalReleaseFile(mp4, ["mp4"])) {
-      throw new Error("Release video requires a local MP4 file");
+    if (typeof mp4 !== "string" || !isAllowedReleaseMediaUrl(mp4, ["mp4"])) {
+      throw new Error("Release video requires an approved MP4 URL");
     }
     if (
       webm !== undefined &&
-      (typeof webm !== "string" || !isLocalReleaseFile(webm, ["webm"]))
+      (typeof webm !== "string" || !isAllowedReleaseMediaUrl(webm, ["webm"]))
     ) {
-      throw new Error("Release video WebM must be a local file");
+      throw new Error("Release video WebM must use an approved URL");
     }
     if (
       typeof poster !== "string" ||
-      !isLocalReleaseFile(poster, ["png", "jpg", "jpeg", "webp"])
+      !isAllowedReleaseMediaUrl(poster, ["png", "jpg", "jpeg", "webp"])
     ) {
-      throw new Error("Release video requires a local poster image");
+      throw new Error("Release video requires an approved poster URL");
     }
     if (typeof label !== "string" || !label.trim() || label.length > 240) {
       throw new Error("Release video requires a concise label");

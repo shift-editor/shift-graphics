@@ -126,13 +126,39 @@ test('release videos render local WebM and MP4 sources with a poster and control
   assert.match(markup, /<source src="\/releases\/0\.1\.1-alpha\.1\/curves\.mp4" type="video\/mp4"/);
 });
 
-test('release videos reject remote media and missing accessibility labels', async () => {
-  await writeFile(path.join(directory, 'notes.md'), '# A reviewed release\n\n::video{mp4="https://evil.example/track.mp4" poster="/releases/0.1.1-alpha.1/curves.jpg"}');
+test('release videos render allowlisted R2 sources', async () => {
+  const origin = 'https://releases.shift.graphics/media/v0.1.1-alpha.1';
+  await writeFile(path.join(directory, 'notes.md'), `# A reviewed release\n\n::video{mp4="${origin}/curves.mp4" webm="${origin}/curves.webm" poster="${origin}/curves.jpg" label="Drawing curves in Shift"}`);
+  const markup = renderToStaticMarkup(await ReleasePage({ params: Promise.resolve({ version: release.version }) }));
+  assert.match(markup, /poster="https:\/\/releases\.shift\.graphics\/media\/v0\.1\.1-alpha\.1\/curves\.jpg"/);
+  assert.match(markup, /<source src="https:\/\/releases\.shift\.graphics\/media\/v0\.1\.1-alpha\.1\/curves\.webm" type="video\/webm"/);
+  assert.match(markup, /<source src="https:\/\/releases\.shift\.graphics\/media\/v0\.1\.1-alpha\.1\/curves\.mp4" type="video\/mp4"/);
+});
+
+test('release videos reject unapproved remote media and missing accessibility labels', async () => {
+  const invalidMp4Urls = [
+    'https://evil.example/media/v0.1.1-alpha.1/track.mp4',
+    'https://releases.shift.graphics.evil.example/media/v0.1.1-alpha.1/track.mp4',
+    'https://releases.shift.graphics/nightly/track.mp4',
+    'https://releases.shift.graphics/media/v0.1.1-alpha.1/track.mp4?download=1',
+  ];
+
+  for (const mp4 of invalidMp4Urls) {
+    await writeFile(path.join(directory, 'notes.md'), `# A reviewed release\n\n::video{mp4="${mp4}" poster="/releases/0.1.1-alpha.1/curves.jpg" label="Drawing curves in Shift"}`);
+    await assert.rejects(
+      async () => renderToStaticMarkup(
+        await ReleasePage({ params: Promise.resolve({ version: release.version }) }),
+      ),
+      /approved MP4 URL/,
+    );
+  }
+
+  await writeFile(path.join(directory, 'notes.md'), '# A reviewed release\n\n::video{mp4="/releases/0.1.1-alpha.1/curves.mp4" poster="/releases/0.1.1-alpha.1/curves.jpg"}');
   await assert.rejects(
     async () => renderToStaticMarkup(
       await ReleasePage({ params: Promise.resolve({ version: release.version }) }),
     ),
-    /local MP4 file|concise label/,
+    /concise label/,
   );
 });
 
