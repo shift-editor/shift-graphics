@@ -17,22 +17,31 @@ export function ReleaseVideo({
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
     const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let isInView = false;
 
-    const applyMotionPreference = () => {
-      const video = videoRef.current;
-      if (!video) return;
-
-      if (motionPreference.matches) {
+    const syncPlayback = () => {
+      if (!isInView || motionPreference.matches) {
         video.pause();
       } else {
         void video.play().catch(() => undefined);
       }
     };
 
-    applyMotionPreference();
-    motionPreference.addEventListener("change", applyMotionPreference);
-    return () => motionPreference.removeEventListener("change", applyMotionPreference);
+    const observer = new IntersectionObserver(([entry]) => {
+      isInView = entry.isIntersecting;
+      syncPlayback();
+    });
+
+    observer.observe(video);
+    motionPreference.addEventListener("change", syncPlayback);
+    return () => {
+      observer.disconnect();
+      motionPreference.removeEventListener("change", syncPlayback);
+    };
   }, []);
 
   return (

@@ -3,13 +3,16 @@
 Shift is a free, open-source font editor for macOS, Windows, and Linux. Version 0.1.1 is the first alpha release.
 
 This is early software. Work on copies of your fonts, keep independent backups, and expect workflows and document details to change.
-::video{mp4="https://releases.shift.graphics/media/v0.1.1/complete-features.mp4" poster="https://releases.shift.graphics/media/v0.1.1/complete-features.jpg" label="Opening a font, browsing glyphs, editing outlines, and adjusting variable axes in Shift"}
+
+![A pixel-art ampersand open in Shift](/releases/0.1.1/hero.png)
 
 ## Open and browse
 
 Start a new font, open a `.shift` document, or inspect an existing TTF, OTF, UFO, Designspace, Glyphs, or Glyphspackage source. Browse by category, search the glyph catalog, and open any glyph to inspect its outlines and metrics.
 
 Files other than `.shift` initially open as read-only previews. For supported source formats such as UFO, Designspace, and Glyphs, choose **Save as Shift** to create an independent Shift document before editing. Compiled TTF and OTF files remain view-only.
+
+::video{mp4="https://releases.shift.graphics/media/v0.1.1/complete-features.mp4" poster="https://releases.shift.graphics/media/v0.1.1/complete-features.jpg" label="Opening a font, browsing glyphs, editing outlines, and adjusting variable axes in Shift"}
 
 ## Draw and edit curves
 
@@ -25,7 +28,7 @@ Move, resize, rotate, and flip selections on the canvas or enter precise positio
 
 For closed contours, Shift also provides **Union**, **Intersect**, and **Subtract**. You can use **Copy**, **Paste**, and **Duplicate** between glyphs, or paste compatible SVG outlines from design tools.
 
-<!-- VIDEO SLOT: Transform and shapes. Show rectangle and ellipse drawing, constrained resize, rotation, precise dimensions, alignment, and one boolean operation. -->
+::video{mp4="https://releases.shift.graphics/media/v0.1.1/transforms.mp4" poster="https://releases.shift.graphics/media/v0.1.1/transforms.jpg" label="Drawing, transforming, and intersecting rectangle and ellipse contours in Shift"}
 
 ## Explore variable fonts
 
