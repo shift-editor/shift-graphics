@@ -45,16 +45,19 @@ export default async function ReleasePreview({
   const version = (await getReleases({ draft: true })).find(
     (entry) => entry.directory === release,
   )?.version;
-  const [logo, editor] = await Promise.all([
+  const [logo, releaseHero] = await Promise.all([
     readFile(path.join(process.cwd(), "src/emails/assets/shift-logo.png")),
-    readFile(path.join(process.cwd(), "public/editor.png")),
+    readFile(path.join(process.cwd(), "public/releases/0.1.1/hero.png")),
   ]);
   const title = /<title>([\s\S]*?)<\/title>/i.exec(html)?.[1] ?? "Untitled";
   const srcDoc =
     '<!doctype html><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; img-src data:; style-src \'unsafe-inline\'; base-uri \'none\'; form-action \'none\'">' +
     html
       .replace("cid:shift-logo", `data:image/png;base64,${logo.toString("base64")}`)
-      .replace("cid:shift-editor", `data:image/png;base64,${editor.toString("base64")}`)
+      .replace(
+        "https://shift.graphics/releases/0.1.1/hero.png",
+        `data:image/png;base64,${releaseHero.toString("base64")}`,
+      )
       .replaceAll("{{{RESEND_UNSUBSCRIBE_URL}}}", "#");
 
   return (

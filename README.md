@@ -38,13 +38,14 @@ To revert this feature, remove the `/releases` route, `src/lib/releases.ts`, `co
 
 ## Footer updates signup
 
-`UpdatesSignupForm` appears in the shared site footer and uses the `subscribeToUpdates` Server Action. It stores contacts in Resend for release announcements and occasional development notes. It does not send a welcome email. Signup is **off by default**; without all configuration below, the form stays visible but its submit button is disabled.
+`UpdatesSignupForm` appears in the shared site footer and uses the `subscribeToUpdates` Server Action. It stores contacts in Resend for release announcements and occasional development notes. A separately controlled confirmation email can be sent once to newly created contacts. Signup is **off by default**; without its required configuration, the form stays visible but its submit button is disabled.
 
 ### Configuration — set manually in Vercel, not in agent-accessible files
 
 | Variable | Purpose |
 | --- | --- |
 | `UPDATES_SIGNUP_ENABLED` | Set to the literal `true` to enable contact storage. Unset or any other value disables it. |
+| `UPDATES_SIGNUP_EMAILS_ENABLED` | Separately set to `true` to send a best-effort confirmation to newly created contacts. Leave off for collection-only rollout. |
 | `RESEND_API_KEY` | Server-only Resend key. Contact management requires Full access, which also permits sending; it is **not** a no-send credential. |
 | `TURNSTILE_SECRET_KEY` | Server-only Cloudflare Turnstile secret. |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Public site key for the same Turnstile widget. |
@@ -55,18 +56,20 @@ Before enabling signup:
 
 1. Configure Turnstile for `shift.graphics` and `www.shift.graphics`. The server requires a successful, single-use token with the `updates-signup` action and one of those hostnames. Production verification rejects localhost. No Turnstile script loads while signup is disabled.
 2. Configure suitable request-rate limits at Cloudflare/Vercel for Server Action POST requests. Turnstile is bot protection, not a distributed rate limiter.
-3. Deploy with `UPDATES_SIGNUP_ENABLED` off and review the footer. Redeploy after setting the environment variables because the enabled state and public site key are set during the build.
-4. Before sending any announcement, use a subscription-aware Resend Broadcast with an unsubscribe link. Existing opted-out contacts must remain opted out.
+3. Review the form states at `/preview/footer?state=idle|submitting|success|error` and the confirmation template at `/preview/updates-confirmation`. Both previews disable external actions and return 404 outside development. Verify the Resend sending domain and reply routing before enabling confirmation delivery.
+4. Deploy with both switches off and review the footer. Redeploy after setting the environment variables because the enabled state and public site key are set during the build. Enable contact storage before separately enabling confirmations.
+5. Before sending any announcement, use a subscription-aware Resend Broadcast with an unsubscribe link. Existing opted-out contacts must remain opted out.
 
-No deployment, credential change, contact import, campaign creation, scheduling, or email delivery is part of this implementation.
+No deployment, credential change, contact import, campaign creation, scheduling, or live email delivery is part of this implementation.
 
 ### Behaviour and limits
 
 - Form states: `idle` → `submitting` → `success` or `error`. Errors preserve the email and reset the challenge for a retry.
 - Email is required, trimmed, validated, and lowercased. Contact storage must succeed before the UI reports success.
 - Existing contacts are never mutated by signup, so an opted-out contact stays opted out. Concurrent duplicate creates resolve without changing email preferences.
-- Provider failures, invalid input, and failed challenges never produce fake success. Raw addresses, secrets, tokens, and provider error bodies are not logged by application code.
-- Resend Broadcasts, rather than custom website endpoints, own campaign delivery and unsubscribe handling.
+- Confirmation delivery is best-effort and only attempted for a newly created, still-subscribed contact. Existing contacts receive no repeat or retroactive confirmation. A delivery failure does not invalidate the saved contact, and Resend receives an idempotency key for accepted retries.
+- Provider failures, invalid input, and failed challenges never produce fake signup success. Raw addresses, secrets, tokens, and provider error bodies are not logged by application code.
+- Resend Broadcasts, rather than custom website endpoints, own campaign delivery and unsubscribe handling. The transactional confirmation tells recipients that future updates include an unsubscribe link.
 
 ## Verification
 
@@ -77,7 +80,7 @@ npx tsc --noEmit
 npm run build
 ```
 
-`npm test` runs a fake provider entirely in-process with dummy keys and blocks real network access. It covers validation, Turnstile claims and replay, duplicate and concurrent signups, opt-out preservation, and provider failures. It does not establish live Resend or Turnstile account configuration.
+`npm test` runs a fake provider entirely in-process with dummy keys and blocks real network access. It covers validation, Turnstile claims and replay, duplicate and concurrent signups, opt-out preservation, confirmation gating and delivery failures, and provider failures. It does not establish live Resend or Turnstile account configuration.
 
 ## Build
 

@@ -3,6 +3,12 @@ export type UpdatesSignupResult = {
   message: string;
 };
 
+export type UpdatesSignupPreviewState =
+  | "idle"
+  | "submitting"
+  | "success"
+  | "error";
+
 export type TurnstileApi = {
   render: (
     container: HTMLElement,

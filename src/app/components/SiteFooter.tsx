@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { UpdatesSignupPreviewState } from "@/lib/updates-types";
 import UpdatesSignupForm from "./UpdatesSignupForm";
 import { Separator } from "./ui/Separator";
 
@@ -15,7 +16,11 @@ const communityLinks = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/kostyafarber/" },
 ];
 
-export default function SiteFooter() {
+export default function SiteFooter({
+  previewState,
+}: {
+  previewState?: UpdatesSignupPreviewState;
+} = {}) {
   const updatesEnabled =
     process.env.UPDATES_SIGNUP_ENABLED === "true" &&
     Boolean(
@@ -66,10 +71,15 @@ export default function SiteFooter() {
               </nav>
             </div>
 
-            <p className="text-xs tracking-tight">
-              <span className="font-semibold">Kostya Farber</span> ©{" "}
-              {new Date().getFullYear()}
-            </p>
+            <div>
+              <p className="mb-1 text-xs text-secondary">
+                The craft of type, open to everyone.
+              </p>
+              <p className="text-xs tracking-tight">
+                <span className="font-semibold">Kostya Farber</span> ©{" "}
+                {new Date().getFullYear()}
+              </p>
+            </div>
           </div>
 
           <div className="flex flex-col items-center justify-center lg:self-center">
@@ -104,6 +114,7 @@ export default function SiteFooter() {
             <UpdatesSignupForm
               enabled={updatesEnabled}
               siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+              previewState={previewState}
             />
           </section>
         </div>

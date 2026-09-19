@@ -1,4 +1,6 @@
 import "server-only";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import type { UpdatesSignupResult } from "./updates-types";
 
 const contactIdPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -33,6 +35,77 @@ export async function verifyTurnstile(turnstileToken: string): Promise<boolean> 
     result.action === "updates-signup" &&
     ["shift.graphics", "www.shift.graphics"].includes(result.hostname)
   );
+}
+
+export async function sendUpdatesConfirmation(id: string): Promise<void> {
+  if (
+    process.env.UPDATES_SIGNUP_ENABLED !== "true" ||
+    process.env.UPDATES_SIGNUP_EMAILS_ENABLED !== "true"
+  ) {
+    return;
+  }
+  if (!process.env.RESEND_API_KEY || !contactIdPattern.test(id)) {
+    throw new Error("Updates confirmation delivery is not configured");
+  }
+
+  const contactResponse = await fetch(`https://api.resend.com/contacts/${id}`, {
+    headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}` },
+    signal: AbortSignal.timeout(10_000),
+    cache: "no-store",
+  });
+  if (!contactResponse.ok) throw new Error("Subscription could not be checked");
+
+  const contact = await contactResponse.json();
+  if (contact.unsubscribed === true) return;
+  if (
+    contact.id !== id ||
+    contact.unsubscribed !== false ||
+    typeof contact.email !== "string" ||
+    !contact.email
+  ) {
+    throw new Error("Invalid subscription response");
+  }
+
+  const [html, logo] = await Promise.all([
+    readFile(path.join(process.cwd(), "src/emails/updates-confirmation.html"), "utf8"),
+    readFile(path.join(process.cwd(), "src/emails/assets/shift-logo.png")),
+  ]);
+  const sent = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+      "Content-Type": "application/json",
+      "Idempotency-Key": `shift-updates-confirmation/${id}`,
+    },
+    body: JSON.stringify({
+      from: "Shift <updates@shift.graphics>",
+      reply_to: "updates@shift.graphics",
+      to: [contact.email],
+      subject: "You’re subscribed to Shift updates",
+      html,
+      text: [
+        "You’re subscribed.",
+        "Hey,",
+        "Thanks for subscribing to Shift updates.",
+        "I’ll send release announcements and occasional development notes about Shift, a free and open-source font editor for macOS, Windows, and Linux.",
+        "If you have a question or something you’d like to see, just hit reply.",
+        "Thanks,\nKostya",
+        "GitHub: https://github.com/shift-editor/shift\nDiscord: https://discord.gg/582FxBdNH7\nX: https://x.com/kostyafarber_\nLinkedIn: https://www.linkedin.com/in/kostyafarber/",
+        "You’re receiving this because you subscribed to Shift updates. You can unsubscribe from any update.",
+      ].join("\n\n"),
+      attachments: [
+        {
+          filename: "shift-logo.png",
+          content: logo.toString("base64"),
+          content_type: "image/png",
+          content_id: "shift-logo",
+        },
+      ],
+    }),
+    signal: AbortSignal.timeout(10_000),
+    cache: "no-store",
+  });
+  if (!sent.ok) throw new Error("Updates confirmation email was not accepted");
 }
 
 export async function subscribeToUpdates(
@@ -87,6 +160,7 @@ export async function subscribeToUpdates(
     }
 
     const normalizedEmail = email.trim().toLowerCase();
+    let createdContactId: string | null = null;
     const headers = {
       Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
       "Content-Type": "application/json",
@@ -132,12 +206,21 @@ export async function subscribeToUpdates(
         if (typeof contact.id !== "string" || !contactIdPattern.test(contact.id)) {
           throw new Error("Invalid contact response");
         }
+        createdContactId = contact.id;
+      }
+    }
+
+    if (createdContactId) {
+      try {
+        await sendUpdatesConfirmation(createdContactId);
+      } catch {
+        console.error("Updates signup saved; confirmation email could not be delivered.");
       }
     }
 
     return {
       status: "success",
-      message: "Thanks. Your request was received, and existing email preferences were left unchanged.",
+      message: "Thanks—your signup has been received.",
     };
   } catch {
     console.error("Updates signup could not be completed.");

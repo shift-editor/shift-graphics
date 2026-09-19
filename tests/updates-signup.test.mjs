@@ -16,10 +16,13 @@ globalThis.fetch = async () => {
   throw new Error("Network is disabled in tests");
 };
 
-const { subscribeToUpdates, verifyTurnstile } = await import("../src/lib/updates.ts");
+const { sendUpdatesConfirmation, subscribeToUpdates, verifyTurnstile } = await import(
+  "../src/lib/updates.ts"
+);
 
 const configuration = {
   UPDATES_SIGNUP_ENABLED: "true",
+  UPDATES_SIGNUP_EMAILS_ENABLED: "true",
   RESEND_API_KEY: "test-only-not-a-real-resend-key",
   TURNSTILE_SECRET_KEY: "test-only-not-a-real-turnstile-key",
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: "test-only-public-key",
@@ -29,6 +32,7 @@ let contacts;
 let fail;
 let originalConfiguration;
 let requests;
+let sentEmails;
 let usedTokens;
 
 function form(email = "person@example.com") {
@@ -53,6 +57,7 @@ beforeEach(() => {
   contacts = new Map();
   fail = () => undefined;
   requests = [];
+  sentEmails = [];
   usedTokens = new Set();
   mock.method(console, "error", () => {});
   mock.method(globalThis, "fetch", async (input, options = {}) => {
@@ -82,10 +87,17 @@ beforeEach(() => {
       const contact = addContact(body.email);
       return Response.json({ object: "contact", id: contact.id }, { status: 201 });
     }
+    if (url.pathname === "/emails" && method === "POST") {
+      const body = JSON.parse(options.body);
+      sentEmails.push({ body, headers: options.headers });
+      return Response.json({ id: randomUUID() });
+    }
     if (url.pathname.startsWith("/contacts/")) {
       assert.equal(method, "GET", "Existing contacts must never be mutated by signup");
-      const email = decodeURIComponent(url.pathname.slice("/contacts/".length));
-      const contact = contacts.get(email);
+      const identifier = decodeURIComponent(url.pathname.slice("/contacts/".length));
+      const contact =
+        contacts.get(identifier) ??
+        [...contacts.values()].find(({ id }) => id === identifier);
       return contact ? Response.json(contact) : Response.json({}, { status: 404 });
     }
     assert.fail(`Unexpected mock request: ${method} ${url.pathname}`);
@@ -119,13 +131,42 @@ test("the signup switch requires literal true", async () => {
   assert.equal(requests.length, 0);
 });
 
-test("new signup stores one normalized contact without sending email", async () => {
+test("new signup stores one normalized contact and sends one confirmation", async () => {
   const result = await subscribeToUpdates(form("  PERSON+shift@EXAMPLE.com  "));
   assert.equal(result.status, "success");
   assert.equal(contacts.size, 1);
-  assert.equal(contacts.get("person+shift@example.com").unsubscribed, false);
+  const contact = contacts.get("person+shift@example.com");
+  assert.equal(contact.unsubscribed, false);
   assert.equal(requests.filter(({ url }) => url.pathname === "/contacts").length, 1);
-  assert.equal(requests.filter(({ url }) => url.pathname === "/emails").length, 0);
+  assert.equal(sentEmails.length, 1);
+  assert.deepEqual(sentEmails[0].body.to, ["person+shift@example.com"]);
+  assert.equal(sentEmails[0].body.subject, "You’re subscribed to Shift updates");
+  assert.match(sentEmails[0].body.html, /You’re subscribed\./);
+  assert.match(sentEmails[0].body.text, /occasional development notes/);
+  assert.deepEqual(sentEmails[0].body.attachments.map(({ content_id }) => content_id), [
+    "shift-logo",
+  ]);
+  assert.equal(
+    sentEmails[0].headers["Idempotency-Key"],
+    `shift-updates-confirmation/${contact.id}`,
+  );
+});
+
+test("confirmation delivery is independently off by default", async () => {
+  delete process.env.UPDATES_SIGNUP_EMAILS_ENABLED;
+  assert.equal((await subscribeToUpdates(form())).status, "success");
+  assert.equal(contacts.size, 1);
+  assert.equal(sentEmails.length, 0);
+});
+
+test("confirmation delivery requires both literal rollout switches", async () => {
+  const contact = addContact();
+  process.env.UPDATES_SIGNUP_ENABLED = "false";
+  await sendUpdatesConfirmation(contact.id);
+  process.env.UPDATES_SIGNUP_ENABLED = "true";
+  process.env.UPDATES_SIGNUP_EMAILS_ENABLED = "false";
+  await sendUpdatesConfirmation(contact.id);
+  assert.equal(requests.length, 0);
 });
 
 for (const email of [
@@ -190,6 +231,7 @@ for (const unsubscribed of [false, true]) {
     assert.equal((await subscribeToUpdates(form("PERSON@example.com"))).status, "success");
     assert.equal(contact.unsubscribed, unsubscribed);
     assert.equal(requests.filter(({ url }) => url.pathname === "/contacts").length, 0);
+    assert.equal(sentEmails.length, 0);
   });
 }
 
@@ -202,6 +244,22 @@ test("a concurrent create conflict resolves without resubscribing", async () => 
   };
   assert.equal((await subscribeToUpdates(form())).status, "success");
   assert.equal(contacts.get("person@example.com").unsubscribed, true);
+  assert.equal(sentEmails.length, 0);
+});
+
+test("confirmation rechecks opt-out status before sending", async () => {
+  const contact = addContact("person@example.com", true);
+  await sendUpdatesConfirmation(contact.id);
+  assert.equal(sentEmails.length, 0);
+});
+
+test("confirmation failures do not invalidate a saved signup", async () => {
+  fail = (url) =>
+    url.pathname === "/emails" ? Response.json({}, { status: 503 }) : undefined;
+  assert.equal((await subscribeToUpdates(form())).status, "success");
+  assert.equal(contacts.size, 1);
+  assert.equal(sentEmails.length, 0);
+  assert.match(String(console.error.mock.calls[0].arguments[0]), /confirmation email/);
 });
 
 test("provider failures and rate limits never produce fake success", async () => {

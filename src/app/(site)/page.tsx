@@ -11,7 +11,7 @@ export default function Home() {
           </h1>
           <div className="mt-4 flex w-full items-center justify-center text-center">
             <p className="max-w-[60ch] font-ui text-md">
-              Tools for drawing type and working with variable fonts.
+              A cross-platform editor built for variable font design.
             </p>
           </div>
         </header>
