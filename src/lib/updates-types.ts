@@ -1,11 +1,6 @@
-export type WaitlistResult = {
+export type UpdatesSignupResult = {
   status: "idle" | "success" | "error";
   message: string;
-};
-
-export type WaitlistContact = {
-  id: string;
-  created: boolean;
 };
 
 export type TurnstileApi = {
@@ -14,6 +9,7 @@ export type TurnstileApi = {
     options: {
       sitekey: string;
       action: string;
+      appearance: "interaction-only";
       "response-field-name": string;
     },
   ) => string;

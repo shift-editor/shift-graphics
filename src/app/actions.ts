@@ -1,18 +1,11 @@
 "use server";
 
-import * as waitlist from "@/lib/waitlist";
-import type { WaitlistResult } from "@/lib/waitlist-types";
+import * as updates from "@/lib/updates";
+import type { UpdatesSignupResult } from "@/lib/updates-types";
 
-export async function submitWaitlist(
-  _previous: WaitlistResult,
+export async function subscribeToUpdates(
+  _previous: UpdatesSignupResult,
   formData: FormData,
-): Promise<WaitlistResult> {
-  return waitlist.submitWaitlist(formData);
-}
-
-export async function unsubscribeContact(
-  _previous: WaitlistResult,
-  formData: FormData,
-): Promise<WaitlistResult> {
-  return waitlist.unsubscribeContact(formData);
+): Promise<UpdatesSignupResult> {
+  return updates.subscribeToUpdates(formData);
 }

@@ -13,17 +13,6 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Waitlist and email design preview
-
-With `npm run dev` running, open [http://localhost:3000/preview/waitlist](http://localhost:3000/preview/waitlist).
-
-- Development-only page; returns 404 in production.
-- Editable fields for visual review, with submission deliberately disabled. No mock submission flow yet.
-- Thank-you email draft: `src/emails/thank-you.html`. Uses inline styles and presentation tables; no external assets or tracking.
-- Email logo: `src/emails/assets/shift-logo.svg`, copied from Shift’s `apps/desktop/src/renderer/src/assets/launcher-logo.svg` (blue landing-page lockup). `shift-logo.png` is its email-compatible export, cropped to `{ left: 140, top: 170, width: 890, height: 225 }` and resized to 448px wide. The preview embeds the PNG locally; future delivery must attach it with Content-ID `shift-logo` to resolve the template’s `cid:shift-logo` image.
-- This preview never invokes the form action or connects to Resend. Its links are sandboxed, and its unsubscribe URL is an inert placeholder.
-- Browser preview is not email-client compatibility testing.
-
 ## Release notes and announcement preparation
 
 `/releases` is a full release feed with editorial highlights and asset-backed downloads. The shared `ReleaseEntry({ release, view })` renders the same entry at `/releases/<version>` (for example, `/releases/0.1.1` or `/releases/0.1.1-alpha.1`), with the generated full changelog open by default. Desktop entries use a sticky version/date rail; mobile entries stack the metadata above the content. Version pages support `#highlights`, `#downloads`, and `#changelog`; feed permalinks use `#<version>`. Slugs use the exact version without a leading `v`; the original GitHub tag remains in metadata. Unknown versions return 404. Approved emails should link directly to the version page, not the index. The homepage navigation links to the index. There is no GitHub request during builds or page visits, no remote MDX execution, and no automatic publication.
@@ -47,44 +36,37 @@ Draft notes are public once pushed to this repository, but importing source data
 
 To revert this feature, remove the `/releases` route, `src/lib/releases.ts`, `content/releases/`, the homepage navigation link, and the `release:prepare` package script; remove `react-markdown`/`remark-gfm` if unused elsewhere. Keep the private checkout so editorial work is not lost.
 
-## Server-backed waitlist
+## Footer updates signup
 
-Homepage signup buttons link to `/waitlist`, which uses `WaitlistForm` and the `submitWaitlist` server action instead of Formspree. The form and its confirmation stay on that dedicated page. **Signups and welcome delivery are both off by default.** Deploying without the configuration below keeps submission disabled while leaving the fields editable; it does not fall back to Formspree or pretend to save signups.
+`UpdatesSignupForm` appears in the shared site footer and uses the `subscribeToUpdates` Server Action. It stores contacts in Resend for release announcements and occasional development notes. It does not send a welcome email. Signup is **off by default**; without all configuration below, the form stays visible but its submit button is disabled.
 
 ### Configuration — set manually in Vercel, not in agent-accessible files
 
 | Variable | Purpose |
 | --- | --- |
-| `WAITLIST_ENABLED` | Set to the literal `true` to enable signup storage. Unset or any other value disables it. |
-| `WAITLIST_EMAILS_ENABLED` | Separately set to `true` to enable a best-effort thank-you email for newly created contacts. Leave off for collection-only rollout. |
+| `UPDATES_SIGNUP_ENABLED` | Set to the literal `true` to enable contact storage. Unset or any other value disables it. |
 | `RESEND_API_KEY` | Server-only Resend key. Contact management requires Full access, which also permits sending; it is **not** a no-send credential. |
 | `TURNSTILE_SECRET_KEY` | Server-only Cloudflare Turnstile secret. |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Public site key for the same Turnstile widget. |
-| `UNSUBSCRIBE_SECRET` | Independent, cryptographically random secret of at least 32 characters for signing unsubscribe links. Required before welcome delivery; keep it available long-term. |
 
-Do not paste secrets into chat, commit them, or expose them to this agent. Vercel storage is not an agent isolation boundary if the agent can retrieve those values with other credentials or tools. The switches are rollout controls, not a security sandbox.
+Do not paste secrets into chat or commit them. The switch is a rollout control, not a security sandbox.
 
-Before enabling anything:
+Before enabling signup:
 
-1. Review remaining transitive dependency audit findings before production rollout. The Next.js-specific advisories were cleared by upgrading `next` and `eslint-config-next` to `16.3.4`.
-2. In Resend, create a **string** contact property named `feedback`. The form accepts up to 2,000 characters and does not truncate. Confirm that limit in the configured account before rollout.
-3. Configure Turnstile for `shift.graphics` and `www.shift.graphics`. The server requires a successful, single-use token with the `waitlist` action and one of those hostnames. Production verification deliberately rejects localhost. No Turnstile script loads while submission is disabled.
-4. Configure suitable request-rate limits at Cloudflare/Vercel for Server Action POST requests (normally `/waitlist`). Turnstile is bot protection, not a distributed rate limiter. Resend may also return rate-limit errors; the form handles storage failures without reporting false success.
-5. Verify the sending domain in Resend. From is `Shift <updates@shift.graphics>` and Reply-To is `updates@shift.graphics`; keep Cloudflare’s incoming-mail forwarding intact.
-6. Deploy with both switches off and review. Enable collection first; enable thank-you emails only after explicitly approving a real delivery test and confirming reply routing, email rendering, and unsubscribe. Redeploy after environment changes: the waitlist page’s enabled state and public site key are set during the build.
+1. Configure Turnstile for `shift.graphics` and `www.shift.graphics`. The server requires a successful, single-use token with the `updates-signup` action and one of those hostnames. Production verification rejects localhost. No Turnstile script loads while signup is disabled.
+2. Configure suitable request-rate limits at Cloudflare/Vercel for Server Action POST requests. Turnstile is bot protection, not a distributed rate limiter.
+3. Deploy with `UPDATES_SIGNUP_ENABLED` off and review the footer. Redeploy after setting the environment variables because the enabled state and public site key are set during the build.
+4. Before sending any announcement, use a subscription-aware Resend Broadcast with an unsubscribe link. Existing opted-out contacts must remain opted out.
 
-No deployment, credentials, real delivery test, CSV import, or changes to the existing Formspree account are part of this implementation.
+No deployment, credential change, contact import, campaign creation, scheduling, or email delivery is part of this implementation.
 
 ### Behaviour and limits
 
-- Form states: `idle` → `submitting` → `success` or `error`. Errors preserve controlled input values and reset the challenge so the user can retry with a fresh token.
-- Email is required, trimmed, validated, and lowercased. Feedback is optional. Existing contacts retain their unsubscribe status, and blank repeat feedback does not erase previous feedback. Nonempty repeat feedback replaces the previous value; this is **not** a feedback history database.
-- Contact storage must succeed before the UI reports success. Provider failures, invalid input, and failed challenges never produce fake success. Raw addresses, feedback, secrets, tokens, and provider error bodies are not logged by application code.
-- Thank-you delivery is **best-effort**, not a transactional outbox. A failed welcome does not invalidate the saved contact. There is no background queue or automatic retry; repeating the form for an existing contact does not resend the welcome. A create whose response was lost may save the contact without a welcome.
-- New-contact sends recheck the subscription status and use `shift-welcome/<contact-id>` as a Resend idempotency key (retained by Resend for 24 hours). Normal repeat signups skip sending independently of that window. There is no claim of durable exactly-once delivery across deletes/reimports or every possible provider race.
-- `/unsubscribe?token=…` is a signed confirmation page. GET only checks the signature locally; link scanners do not change subscriptions. Confirming POST sets the contact’s global `unsubscribed` flag in Resend. Opt-outs continue to work with both rollout switches off, provided the API key and signing secret remain configured. Keep the signing secret stable or old links will stop working.
-- The URL uses an opaque contact ID, not an email address, and the page sets `no-referrer` and `noindex`. It is a bearer link: do not log/share it. This is a confirmation flow, not an RFC 8058 one-click endpoint.
-- Future update/release campaigns are not implemented. Use subscription-aware Resend Broadcasts for those; the transactional welcome endpoint is not a campaign sender.
+- Form states: `idle` → `submitting` → `success` or `error`. Errors preserve the email and reset the challenge for a retry.
+- Email is required, trimmed, validated, and lowercased. Contact storage must succeed before the UI reports success.
+- Existing contacts are never mutated by signup, so an opted-out contact stays opted out. Concurrent duplicate creates resolve without changing email preferences.
+- Provider failures, invalid input, and failed challenges never produce fake success. Raw addresses, secrets, tokens, and provider error bodies are not logged by application code.
+- Resend Broadcasts, rather than custom website endpoints, own campaign delivery and unsubscribe handling.
 
 ## Verification
 
@@ -95,7 +77,7 @@ npx tsc --noEmit
 npm run build
 ```
 
-`npm test` runs a fake provider entirely in-process with dummy keys and blocks real network access. It covers validation, Turnstile claims/replay, duplicate and concurrent signups, feedback persistence, opt-out preservation, delivery failures, idempotency, signed links, and unsubscribe retries. It does not establish live Resend account configuration or email-client compatibility.
+`npm test` runs a fake provider entirely in-process with dummy keys and blocks real network access. It covers validation, Turnstile claims and replay, duplicate and concurrent signups, opt-out preservation, and provider failures. It does not establish live Resend or Turnstile account configuration.
 
 ## Build
 
