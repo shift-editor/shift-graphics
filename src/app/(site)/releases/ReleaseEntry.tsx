@@ -1,4 +1,5 @@
 import { ArrowLeft, ArrowRight, ArrowUpRight, Download } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { downloadTargets } from "../../../lib/downloads";
 import { getDisplayDate, type Release } from "../../../lib/releases";
@@ -56,8 +57,16 @@ export default function ReleaseEntry({
             {release.version}
           </Link>
           {date && (
-            <div className="relative mt-3 grid grid-cols-[8px_1fr] gap-x-3 items-baseline">
-              <span aria-hidden="true" className="mt-1.5 h-2 w-2 rounded-full bg-accent" />
+            <div className="relative mt-3 grid grid-cols-[24px_1fr] items-center gap-x-3">
+              <Image
+                src="/backwards-cap.svg"
+                alt=""
+                width={32}
+                height={32}
+                unoptimized
+                aria-hidden="true"
+                className="relative z-10 h-6 w-6 bg-app object-contain"
+              />
               {dateTime ? (
                 <time dateTime={dateTime} className="font-mono text-xs text-secondary">
                   {date}
@@ -73,7 +82,7 @@ export default function ReleaseEntry({
               )}
               <span
                 aria-hidden="true"
-                className="absolute top-6 left-[3.5px] hidden h-screen w-px bg-line min-[900px]:block"
+                className="absolute top-8 left-[11.5px] hidden h-screen w-px bg-line min-[900px]:block"
               />
             </div>
           )}
