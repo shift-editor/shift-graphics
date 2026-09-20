@@ -1,6 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
 import GithubIcon from "../assets/github.svg";
-import Logo from "../assets/logo.svg";
 import { getGitHubStarCount } from "../../lib/github";
 import MobileNavMenu from "./MobileNavMenu";
 import PrimaryNavigation from "./PrimaryNavigation";
@@ -21,7 +21,14 @@ export default async function SiteHeader() {
         className="grid grid-cols-[1fr_auto] items-center gap-x-6 text-sm sm:grid-cols-[1fr_auto_1fr] [&_a]:focus-visible:outline-2 [&_a]:focus-visible:outline-offset-4 [&_a]:focus-visible:outline-accent"
       >
         <Link href="/" aria-label="Shift home" className="justify-self-start">
-          <Logo className="block h-5 w-auto" aria-hidden />
+          <Image
+            src="/shift-logo-lettering.svg"
+            alt=""
+            width={694}
+            height={233}
+            unoptimized
+            className="block h-auto w-[42px]"
+          />
         </Link>
 
         <PrimaryNavigation />

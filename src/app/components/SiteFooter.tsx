@@ -32,78 +32,62 @@ export default function SiteFooter({
   return (
     <footer className="mt-20 font-ui">
       <Separator />
-      <div className="px-6 pt-10 pb-4 sm:px-8 lg:px-8">
-        <div className="grid gap-14 lg:min-h-56 lg:grid-cols-3 lg:gap-8">
-          <div className="flex flex-col justify-between gap-12">
-            <div className="flex gap-16 sm:gap-20">
-              <nav aria-label="Community">
-                <h2 className="mb-4 text-sm font-semibold">Community</h2>
-                <ul className="space-y-3 text-xs text-secondary">
-                  {communityLinks.map(({ label, href }) => (
-                    <li key={label}>
-                      <a
-                        href={href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
-                      >
-                        {label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-
-              <nav aria-label="Explore">
-                <h2 className="mb-4 text-sm font-semibold">Explore</h2>
-                <ul className="space-y-3 text-xs text-secondary">
-                  {exploreLinks.map(({ label, href }) => (
-                    <li key={label}>
-                      <Link
-                        href={href}
-                        className="transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
-                      >
-                        {label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            </div>
-
-            <div>
-              <p className="mb-1 text-xs text-secondary">
-                The craft of type, open to everyone.
-              </p>
-              <p className="text-xs tracking-tight">
-                <span className="font-semibold">Kostya Farber</span> ©{" "}
-                {new Date().getFullYear()}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-col items-center justify-center lg:self-center">
-            <Image
-              src="/footer-art.svg"
-              alt=""
-              width={600}
-              height={607}
-              unoptimized
-              className="h-auto w-32"
-            />
+      <div className="px-6 pt-8 pb-4 sm:px-8 lg:px-8">
+        <div className="grid grid-cols-2 gap-x-8 gap-y-12 lg:min-h-48 lg:grid-cols-[16rem_7rem_7rem_minmax(2rem,1fr)_minmax(18rem,24rem)] lg:grid-rows-[1fr_auto] lg:gap-x-6 lg:gap-y-0">
+          <div className="order-1 col-span-2 flex items-center self-start lg:order-none lg:col-span-1 lg:col-start-1 lg:row-start-1">
             <Image
               src="/shift-logo-lettering.svg"
               alt="Shift"
               width={694}
               height={233}
               unoptimized
-              className="mt-2 h-auto w-14"
+              className="h-auto w-[62px]"
             />
           </div>
 
+          <nav
+            aria-label="Community"
+            className="order-3 lg:order-none lg:col-start-2 lg:row-start-1"
+          >
+            <h2 className="mb-4 text-sm font-semibold">Community</h2>
+            <ul className="space-y-3 text-xs text-secondary">
+              {communityLinks.map(({ label, href }) => (
+                <li key={label}>
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+                  >
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <nav
+            aria-label="Explore"
+            className="order-3 lg:order-none lg:col-start-3 lg:row-start-1"
+          >
+            <h2 className="mb-4 text-sm font-semibold">Explore</h2>
+            <ul className="space-y-3 text-xs text-secondary">
+              {exploreLinks.map(({ label, href }) => (
+                <li key={label}>
+                  <Link
+                    href={href}
+                    className="transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
           <section
             aria-labelledby="footer-updates-heading"
-            className="w-full max-w-sm lg:justify-self-end"
+            className="order-2 col-span-2 w-full max-w-sm lg:order-none lg:col-span-1 lg:col-start-5 lg:row-span-2 lg:row-start-1 lg:justify-self-end"
           >
             <h2 id="footer-updates-heading" className="text-sm font-semibold">
               Updates
@@ -117,6 +101,16 @@ export default function SiteFooter({
               previewState={previewState}
             />
           </section>
+
+          <div className="order-4 col-span-2 lg:order-none lg:col-span-1 lg:col-start-1 lg:row-start-2">
+            <p className="mb-1 text-xs text-secondary">
+              The craft of type, open to everyone.
+            </p>
+            <p className="text-xs tracking-tight">
+              <span className="font-semibold">Kostya Farber</span> ©{" "}
+              {new Date().getFullYear()}
+            </p>
+          </div>
         </div>
       </div>
     </footer>
