@@ -36,7 +36,7 @@ Move through the design space and watch glyphs update in both the editor and cat
 
 In a Shift document, **Settings** lets you create and edit axes, sources, mappings, style labels, and named instances. Sources contain editable master geometry; interpolated positions are previews between those sources, not extra masters that can be edited accidentally.
 
-<!-- VIDEO SLOT: Variable fonts. Show source switching, axis scrubbing, a named instance, then the Axes and Mapping settings. -->
+::video{mp4="https://releases.shift.graphics/media/v0.1.1/vf-settings.mp4" poster="https://releases.shift.graphics/media/v0.1.1/vf-settings.jpg" label="Scrubbing variable-font axes and editing axis definitions, mappings, and style labels in Shift"}
 
 ## Save and export
 
