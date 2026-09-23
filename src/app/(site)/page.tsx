@@ -11,8 +11,8 @@ export default function Home() {
             <span className="whitespace-nowrap">open-source</span> font editor
           </h1>
           <div className="mt-4 flex w-full items-center justify-center text-center">
-            <p className="max-w-[60ch] font-ui text-sm text-balance lg:text-md">
-              A cross-platform editor built for variable font design.
+            <p className="max-w-[60ch] font-ui text-sm text-balance lg:text-base">
+              Design variable fonts on macOS, Windows, and Linux.
             </p>
           </div>
         </header>
