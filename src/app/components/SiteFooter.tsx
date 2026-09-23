@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { UpdatesSignupPreviewState } from "@/lib/updates-types";
 import UpdatesSignupForm from "./UpdatesSignupForm";
+import CaptLocke from "./capt-locke/CaptLocke";
 import { Separator } from "./ui/Separator";
 
 const exploreLinks = [
@@ -43,6 +44,10 @@ export default function SiteFooter({
               unoptimized
               className="h-auto w-[62px]"
             />
+          </div>
+
+          <div className="order-4 col-span-2 -mb-6 self-end text-primary lg:order-none lg:col-span-1 lg:col-start-1 lg:row-start-1 lg:mb-0 lg:pb-6">
+            <CaptLocke />
           </div>
 
           <nav
@@ -102,7 +107,7 @@ export default function SiteFooter({
             />
           </section>
 
-          <div className="order-4 col-span-2 lg:order-none lg:col-span-1 lg:col-start-1 lg:row-start-2">
+          <div className="order-5 col-span-2 lg:order-none lg:col-span-1 lg:col-start-1 lg:row-start-2">
             <p className="mb-1 text-xs text-secondary">
               The craft of type, open to everyone.
             </p>
