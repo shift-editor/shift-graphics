@@ -47,6 +47,7 @@ To revert this feature, remove the `/releases` route, `src/lib/releases.ts`, `co
 | `UPDATES_SIGNUP_ENABLED` | Set to the literal `true` to enable contact storage. Unset or any other value disables it. |
 | `UPDATES_SIGNUP_EMAILS_ENABLED` | Separately set to `true` to send a best-effort confirmation to newly created contacts. Leave off for collection-only rollout. |
 | `RESEND_API_KEY` | Server-only Resend key. Contact management requires Full access, which also permits sending; it is **not** a no-send credential. |
+| `RESEND_UPDATES_SEGMENT_ID` | ID of the Resend segment that release Broadcasts are sent to. New signups are added to it; contacts in no segment cannot receive Broadcasts. |
 | `TURNSTILE_SECRET_KEY` | Server-only Cloudflare Turnstile secret. |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Public site key for the same Turnstile widget. |
 
@@ -54,7 +55,7 @@ Do not paste secrets into chat or commit them. The switch is a rollout control, 
 
 Before enabling signup:
 
-1. Configure Turnstile for `shift.graphics` and `www.shift.graphics`. The server requires a successful, single-use token with the `updates-signup` action and one of those hostnames. Production verification rejects localhost. No Turnstile script loads while signup is disabled.
+1. Configure Turnstile for `shift.graphics` and `www.shift.graphics`. The server requires a successful, single-use token with the `updates-signup` action and one of those hostnames. Production verification rejects localhost. Preview deployments (`VERCEL_ENV=preview`) also accept their stable branch URL (`VERCEL_BRANCH_URL`); add that hostname to the Turnstile widget and point the Preview `RESEND_UPDATES_SEGMENT_ID` at a test segment to exercise signup before launch. No Turnstile script loads while signup is disabled.
 2. Configure suitable request-rate limits at Cloudflare/Vercel for Server Action POST requests. Turnstile is bot protection, not a distributed rate limiter.
 3. Review the form states at `/preview/footer?state=idle|submitting|success|error` and the confirmation template at `/preview/updates-confirmation`. Both previews disable external actions and return 404 outside development. Verify the Resend sending domain and reply routing before enabling confirmation delivery.
 4. Deploy with both switches off and review the footer. Redeploy after setting the environment variables because the enabled state and public site key are set during the build. Enable contact storage before separately enabling confirmations.
@@ -66,7 +67,7 @@ No deployment, credential change, contact import, campaign creation, scheduling,
 
 - Form states: `idle` → `submitting` → `success` or `error`. Errors preserve the email and reset the challenge for a retry.
 - Email is required, trimmed, validated, and lowercased. Contact storage must succeed before the UI reports success.
-- Existing contacts are never mutated by signup, so an opted-out contact stays opted out. Concurrent duplicate creates resolve without changing email preferences.
+- New contacts are created in the `RESEND_UPDATES_SEGMENT_ID` segment. Existing contacts are never mutated by signup, so an opted-out contact stays opted out, and an existing contact outside that segment is not added to it. Concurrent duplicate creates resolve without changing email preferences.
 - Confirmation delivery is best-effort and only attempted for a newly created, still-subscribed contact. Existing contacts receive no repeat or retroactive confirmation. A delivery failure does not invalidate the saved contact, and Resend receives an idempotency key for accepted retries.
 - Provider failures, invalid input, and failed challenges never produce fake signup success. Raw addresses, secrets, tokens, and provider error bodies are not logged by application code.
 - Resend Broadcasts, rather than custom website endpoints, own campaign delivery and unsubscribe handling. The transactional confirmation tells recipients that future updates include an unsubscribe link.

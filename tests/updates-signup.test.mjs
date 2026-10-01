@@ -24,6 +24,7 @@ const configuration = {
   UPDATES_SIGNUP_ENABLED: "true",
   UPDATES_SIGNUP_EMAILS_ENABLED: "true",
   RESEND_API_KEY: "test-only-not-a-real-resend-key",
+  RESEND_UPDATES_SEGMENT_ID: "00000000-0000-4000-8000-000000000000",
   TURNSTILE_SECRET_KEY: "test-only-not-a-real-turnstile-key",
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: "test-only-public-key",
 };
@@ -82,7 +83,8 @@ beforeEach(() => {
     assert.equal(options.headers.Authorization, `Bearer ${configuration.RESEND_API_KEY}`);
     if (url.pathname === "/contacts" && method === "POST") {
       const body = JSON.parse(options.body);
-      assert.deepEqual(Object.keys(body), ["email"]);
+      assert.deepEqual(Object.keys(body), ["email", "segments"]);
+      assert.deepEqual(body.segments, [{ id: configuration.RESEND_UPDATES_SEGMENT_ID }]);
       if (contacts.has(body.email)) return Response.json({}, { status: 409 });
       const contact = addContact(body.email);
       return Response.json({ object: "contact", id: contact.id }, { status: 201 });
@@ -115,6 +117,7 @@ afterEach(() => {
 for (const key of [
   "UPDATES_SIGNUP_ENABLED",
   "RESEND_API_KEY",
+  "RESEND_UPDATES_SEGMENT_ID",
   "TURNSTILE_SECRET_KEY",
   "NEXT_PUBLIC_TURNSTILE_SITE_KEY",
 ]) {
@@ -124,6 +127,12 @@ for (const key of [
     assert.equal(requests.length, 0);
   });
 }
+
+test("a malformed segment ID fails closed without network", async () => {
+  process.env.RESEND_UPDATES_SEGMENT_ID = "Updates";
+  assert.equal((await subscribeToUpdates(form())).status, "error");
+  assert.equal(requests.length, 0);
+});
 
 test("the signup switch requires literal true", async () => {
   process.env.UPDATES_SIGNUP_ENABLED = "false";
@@ -182,7 +191,9 @@ for (const email of [
   `a@${"b".repeat(64)}.com`,
 ]) {
   test(`invalid email is rejected before provider access: ${JSON.stringify(email)}`, async () => {
-    assert.equal((await subscribeToUpdates(form(email))).status, "error");
+    const result = await subscribeToUpdates(form(email));
+    assert.equal(result.status, "error");
+    assert.equal(result.field, "email");
     assert.equal(requests.length, 0);
   });
 }
@@ -214,6 +225,36 @@ test("Turnstile accepts the www hostname and consumes tokens only once", async (
   challenge.hostname = "www.shift.graphics";
   assert.equal(await verifyTurnstile("single-use-token"), true);
   assert.equal(await verifyTurnstile("single-use-token"), false);
+});
+
+test("Turnstile accepts the branch URL only on preview deployments", async (context) => {
+  const original = { env: process.env.VERCEL_ENV, branch: process.env.VERCEL_BRANCH_URL };
+  context.after(() => {
+    if (original.env === undefined) delete process.env.VERCEL_ENV;
+    else process.env.VERCEL_ENV = original.env;
+    if (original.branch === undefined) delete process.env.VERCEL_BRANCH_URL;
+    else process.env.VERCEL_BRANCH_URL = original.branch;
+  });
+  process.env.VERCEL_BRANCH_URL = "shift-graphics-git-alpha-site.vercel.app";
+  challenge.hostname = "shift-graphics-git-alpha-site.vercel.app";
+
+  process.env.VERCEL_ENV = "production";
+  assert.equal(await verifyTurnstile("production-token"), false);
+  process.env.VERCEL_ENV = "preview";
+  assert.equal(await verifyTurnstile("preview-token"), true);
+});
+
+test("Turnstile accepts Cloudflare test-key results only under next dev", async (context) => {
+  const original = process.env.NODE_ENV;
+  context.after(() => {
+    process.env.NODE_ENV = original;
+  });
+  challenge = { success: true, hostname: "example.com", metadata: { result_with_testing_key: true } };
+
+  process.env.NODE_ENV = "production";
+  assert.equal(await verifyTurnstile("production-token"), false);
+  process.env.NODE_ENV = "development";
+  assert.equal(await verifyTurnstile("development-token"), true);
 });
 
 test("missing or oversized challenge responses do not call providers", async () => {

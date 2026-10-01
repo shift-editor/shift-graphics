@@ -4,6 +4,20 @@ import path from "node:path";
 import type { UpdatesSignupResult } from "./updates-types";
 
 const contactIdPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const segmentIdPattern = contactIdPattern;
+
+/**
+ * Hostnames a Turnstile challenge may have been solved on. Preview deployments
+ * also accept their own stable branch URL so signup can be tested before
+ * launch; production accepts only the real site.
+ */
+function allowedHostnames(): string[] {
+  const hostnames = ["shift.graphics", "www.shift.graphics"];
+  if (process.env.VERCEL_ENV === "preview" && process.env.VERCEL_BRANCH_URL) {
+    hostnames.push(process.env.VERCEL_BRANCH_URL);
+  }
+  return hostnames;
+}
 
 export async function verifyTurnstile(turnstileToken: string): Promise<boolean> {
   if (
@@ -30,10 +44,18 @@ export async function verifyTurnstile(turnstileToken: string): Promise<boolean> 
   if (!response.ok) return false;
 
   const result = await response.json();
+  // `next dev` accepts Cloudflare's always-pass test keys, which report no
+  // action and an example.com hostname, so signup can be tried on localhost.
+  if (
+    process.env.NODE_ENV === "development" &&
+    result.metadata?.result_with_testing_key === true
+  ) {
+    return result.success === true;
+  }
   return (
     result.success === true &&
     result.action === "updates-signup" &&
-    ["shift.graphics", "www.shift.graphics"].includes(result.hostname)
+    allowedHostnames().includes(result.hostname)
   );
 }
 
@@ -114,6 +136,7 @@ export async function subscribeToUpdates(
   if (
     process.env.UPDATES_SIGNUP_ENABLED !== "true" ||
     !process.env.RESEND_API_KEY ||
+    !segmentIdPattern.test(process.env.RESEND_UPDATES_SEGMENT_ID ?? "") ||
     !process.env.TURNSTILE_SECRET_KEY ||
     !process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
   ) {
@@ -137,7 +160,7 @@ export async function subscribeToUpdates(
     email.trim().split("@")[0].includes("..") ||
     formData.getAll("email").length !== 1
   ) {
-    return { status: "error", message: "Enter a valid email address." };
+    return { status: "error", message: "Enter a valid email address.", field: "email" };
   }
   if (
     typeof turnstileToken !== "string" ||
@@ -184,7 +207,10 @@ export async function subscribeToUpdates(
       const created = await fetch("https://api.resend.com/contacts", {
         method: "POST",
         headers,
-        body: JSON.stringify({ email: normalizedEmail }),
+        body: JSON.stringify({
+          email: normalizedEmail,
+          segments: [{ id: process.env.RESEND_UPDATES_SEGMENT_ID }],
+        }),
         signal: AbortSignal.timeout(10_000),
         cache: "no-store",
       });

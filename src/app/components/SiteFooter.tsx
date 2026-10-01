@@ -26,6 +26,7 @@ export default function SiteFooter({
     process.env.UPDATES_SIGNUP_ENABLED === "true" &&
     Boolean(
       process.env.RESEND_API_KEY &&
+        process.env.RESEND_UPDATES_SEGMENT_ID &&
         process.env.TURNSTILE_SECRET_KEY &&
         process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
     );
