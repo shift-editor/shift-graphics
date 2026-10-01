@@ -54,3 +54,34 @@ export const downloadTargets = [
     ],
   },
 ] as const;
+
+const nightlyDownloadBaseUrl = "https://github.com/shift-editor/shift/releases/download/nightly";
+
+export type DownloadLink = {
+  id: string;
+  platform: string;
+  icon: (typeof downloadTargets)[number]["icon"];
+  label: string;
+  href: string;
+};
+
+/**
+ * Installer links for the homepage download menu.
+ *
+ * With a published release's assets, each option links to its matching asset
+ * and options without one are omitted. With `null` (no published release yet),
+ * every option links to the rolling Nightly build.
+ */
+export function downloadLinks(
+  assets: readonly { name: string; url: string }[] | null,
+): DownloadLink[] {
+  return downloadTargets.flatMap(({ platform, icon, options }) =>
+    options.flatMap(({ id, label, assetPattern, nightlyAssetName }) => {
+      if (assets === null) {
+        return [{ id, platform, icon, label, href: `${nightlyDownloadBaseUrl}/${nightlyAssetName}` }];
+      }
+      const asset = assets.find(({ name }) => assetPattern.test(name));
+      return asset ? [{ id, platform, icon, label, href: asset.url }] : [];
+    }),
+  );
+}

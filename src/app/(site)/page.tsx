@@ -1,7 +1,13 @@
 import Image from "next/image";
+import Link from "next/link";
 import DownloadMenu from "../components/DownloadMenu";
+import { downloadLinks } from "../../lib/downloads";
+import { getReleases } from "../../lib/releases";
 
-export default function Home() {
+export default async function Home() {
+  const [latest] = await getReleases();
+  const links = downloadLinks(latest?.assets ?? null);
+
   return (
     <div className="flex flex-1 flex-col">
       <main className="flex flex-1 flex-col items-center justify-center gap-10 lg:mt-18">
@@ -18,8 +24,16 @@ export default function Home() {
         </header>
 
         <div className="px-2 sm:mt-4 flex flex-col items-center justify-start gap-2.5">
-          <DownloadMenu />
-          <p className="w-full text-xs font-sans text-muted text-center">Currently in alpha v0.1.1</p>
+          <DownloadMenu links={links} />
+          <p className="w-full text-xs font-sans text-muted text-center">
+            {latest ? (
+              <Link href={`/releases/${latest.version}`} className="hover:text-accent">
+                Currently in alpha v{latest.version}
+              </Link>
+            ) : (
+              "Currently in alpha · Nightly build"
+            )}
+          </p>
         </div>
 
         <Image
