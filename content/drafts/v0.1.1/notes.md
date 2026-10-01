@@ -16,7 +16,7 @@ Files other than `.shift` initially open as read-only previews. For supported so
 
 ## Draw and edit curves
 
-Use the **Pen** tool to draw straight and cubic segments, continue or close contours, and shape smooth joins. Add rectangles and ellipses, insert points into existing segments, bend curves directly, and toggle points between smooth and corner behavior.
+Use the **Pen** tool to draw straight and cubic segments, continue or close contours, and shape smooth joins. Add rectangles and ellipses, insert points into existing segments, bend curves directly, and toggle points between smooth and corner behavior. Select a handle to set its exact angle and length in the **Handle** section of the sidebar, and adjust side bearings and advance width in the **Glyph** panel.
 
 Deleting a point normally refits the surrounding curve instead of simply breaking the contour. Hold **Shift** while pressing **Delete** or **Backspace** when you intentionally want to leave a gap. **Undo** and **Redo** preserve these edits as complete operations.
 
@@ -30,6 +30,12 @@ For closed contours, Shift also provides **Union**, **Intersect**, and **Subtrac
 
 ::video{mp4="https://releases.shift.graphics/media/v0.1.1/transforms.mp4" poster="https://releases.shift.graphics/media/v0.1.1/transforms.jpg" label="Drawing, transforming, and intersecting rectangle and ellipse contours in Shift"}
 
+## Build with components
+
+Choose **Glyph → Add Component…**, press **Cmd+Shift+C** (**Ctrl+Shift+C** on Windows and Linux), or right-click the canvas to open the component picker. Search by glyph name, character, or Unicode value; related glyphs such as the parts of an accented letter are listed first. If the glyph you need does not exist yet, Shift offers to create it.
+
+Components can be selected, moved, nudged, scaled, rotated, flipped, aligned, and deleted like any other selection, or decomposed into editable outlines. The **Objects** sidebar lists every contour, anchor, and component in the glyph so you can select or remove them directly.
+
 ## Explore variable fonts
 
 Move through the design space and watch glyphs update in both the editor and catalog. Scrub an axis, choose a named instance, or select an exact source to inspect and edit its authored geometry.
@@ -37,6 +43,22 @@ Move through the design space and watch glyphs update in both the editor and cat
 In a Shift document, **Settings** lets you create and edit axes, sources, mappings, style labels, and named instances. Sources contain editable master geometry; interpolated positions are previews between those sources, not extra masters that can be edited accidentally.
 
 ::video{mp4="https://releases.shift.graphics/media/v0.1.1/vf-settings.mp4" poster="https://releases.shift.graphics/media/v0.1.1/vf-settings.jpg" label="Scrubbing variable-font axes and editing axis definitions, mappings, and style labels in Shift"}
+
+## Plan language coverage
+
+The glyph catalog's **Languages** section tracks which languages your font supports, using [Hyperglot](https://hyperglot.rosettatype.com) language data. Choose **Add languages**, pick the scripts you are designing for, and each language shows how many of its required characters are present. Click a language to filter the catalog to its glyphs, or right-click it to review the missing characters and **Generate** them as empty glyphs.
+
+::video{mp4="https://releases.shift.graphics/media/v0.1.1/languages.mp4" poster="https://releases.shift.graphics/media/v0.1.1/languages.jpg" label="Choosing scripts in the glyph catalog and reviewing the glyphs a language still needs in Shift"}
+
+## Themes and launcher
+
+Open **Settings → Appearance** to choose a color theme for the application and canvas: Shift Light and Dark, Solarized, Dracula, Nord, Gruvbox, One Dark, or follow the system.
+
+![Four Shift editor windows stacked, each in a different color theme](/releases/0.1.1/themes.png)
+
+The launcher shows your recent fonts with previews rendered from the fonts themselves, in a grid or list. Each entry can be revealed on disk, have its path copied, or be removed from the list, and **Locate…** helps when a file has moved. **File → Open Recent** offers the same history from the menu.
+
+::video{mp4="https://releases.shift.graphics/media/v0.1.1/launcher.mp4" poster="https://releases.shift.graphics/media/v0.1.1/launcher.jpg" label="Browsing recent fonts in the Shift launcher and switching between grid and list views"}
 
 ## Save and export
 
@@ -48,10 +70,9 @@ When you want to try the result elsewhere, choose **Export TrueType** and open t
 
 - TTF and OTF files are view-only and cannot currently be converted into editable Shift documents through the desktop app.
 - Text proofing and complete spacing and kerning workflows are not available yet.
-- Imported components can be displayed, but complete component, anchor, and guideline authoring workflows are not available.
+- Anchors can be moved and removed, but not yet added or renamed, and guidelines cannot be created.
 - Advanced source-format features may be omitted or approximated during conversion. Some variable-font formats and compiler features remain unsupported.
-- Recent-files history is not currently shown in the launcher.
-- Windows release builds are unsigned and may display an operating-system warning.
+- Windows release builds are unsigned, may display an operating-system warning, and do not update automatically. macOS builds update automatically; Linux builds update through the APT and DNF repositories.
 
 Please continue working on copies and keep your original sources and independent backups.
 
