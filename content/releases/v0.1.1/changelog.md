@@ -1,3 +1,11 @@
+<!-- shift-preview-notice:start -->
+> [!WARNING]
+> **Alpha:** Work on copies and keep independent backups. The macOS builds are signed and notarized. Windows builds are currently unsigned and may trigger Microsoft SmartScreen. Linux RPMs and the checksum manifest are signed with the Shift repository key. See the [code signing policy](https://github.com/shift-editor/shift/blob/main/CODE_SIGNING_POLICY.md).
+<!-- shift-preview-notice:end -->
+
+## [0.1.1](https://github.com/shift-editor/shift/compare/v0.1.0...v0.1.1) (2026-10-01)
+
+
 ### Features
 
 * adapt the launcher lockup and accent text to colour themes ([#474](https://github.com/shift-editor/shift/issues/474)) ([08be9ac](https://github.com/shift-editor/shift/commit/08be9aca65f004373f97e514e252c2400376d19e))

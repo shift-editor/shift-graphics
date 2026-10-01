@@ -1,0 +1,79 @@
+{
+  "version": "0.1.1",
+  "tag": "v0.1.1",
+  "date": "2026-10-01T18:33:21.000Z",
+  "prerelease": true,
+  "source": {
+    "type": "release",
+    "number": 401222672,
+    "url": "https://github.com/shift-editor/shift/releases/tag/v0.1.1",
+    "sha": "a8213cba55c621262abaeba43eb8180a716b14fa"
+  },
+  "assets": [
+    {
+      "name": "SHA256SUMS",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.1.1/SHA256SUMS"
+    },
+    {
+      "name": "SHA256SUMS.asc",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.1.1/SHA256SUMS.asc"
+    },
+    {
+      "name": "Shift-0.1.1-Linux-x64.AppImage",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.1.1/Shift-0.1.1-Linux-x64.AppImage"
+    },
+    {
+      "name": "Shift-0.1.1-Linux-x64.deb",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.1.1/Shift-0.1.1-Linux-x64.deb"
+    },
+    {
+      "name": "Shift-0.1.1-Linux-x64.rpm",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.1.1/Shift-0.1.1-Linux-x64.rpm"
+    },
+    {
+      "name": "Shift-0.1.1-macOS-arm64.dmg",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.1.1/Shift-0.1.1-macOS-arm64.dmg"
+    },
+    {
+      "name": "Shift-0.1.1-macOS-arm64.dmg.blockmap",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.1.1/Shift-0.1.1-macOS-arm64.dmg.blockmap"
+    },
+    {
+      "name": "Shift-0.1.1-macOS-arm64.zip",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.1.1/Shift-0.1.1-macOS-arm64.zip"
+    },
+    {
+      "name": "Shift-0.1.1-macOS-arm64.zip.blockmap",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.1.1/Shift-0.1.1-macOS-arm64.zip.blockmap"
+    },
+    {
+      "name": "Shift-0.1.1-macOS-x64.dmg",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.1.1/Shift-0.1.1-macOS-x64.dmg"
+    },
+    {
+      "name": "Shift-0.1.1-macOS-x64.dmg.blockmap",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.1.1/Shift-0.1.1-macOS-x64.dmg.blockmap"
+    },
+    {
+      "name": "Shift-0.1.1-macOS-x64.zip",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.1.1/Shift-0.1.1-macOS-x64.zip"
+    },
+    {
+      "name": "Shift-0.1.1-macOS-x64.zip.blockmap",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.1.1/Shift-0.1.1-macOS-x64.zip.blockmap"
+    },
+    {
+      "name": "Shift-0.1.1-Windows-x64-Setup.exe",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.1.1/Shift-0.1.1-Windows-x64-Setup.exe"
+    },
+    {
+      "name": "Shift-0.1.1-Windows-x64-Setup.exe.blockmap",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.1.1/Shift-0.1.1-Windows-x64-Setup.exe.blockmap"
+    },
+    {
+      "name": "shift-repository.gpg",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.1.1/shift-repository.gpg"
+    }
+  ],
+  "changelogSha256": "49e16ff4565aa54c630a9ed7b4002dbfee2dfef0195a5f0eb36b3eda4cec5403"
+}
