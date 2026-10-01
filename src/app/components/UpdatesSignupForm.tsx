@@ -3,6 +3,7 @@
 import { useActionState, useEffect, useRef, useState } from "react";
 import Script from "next/script";
 import { subscribeToUpdates } from "@/app/actions";
+import { SuccessGhost } from "./SuccessGhost";
 import type {
   TurnstileApi,
   UpdatesSignupPreviewState,
@@ -14,6 +15,14 @@ declare global {
     turnstile?: TurnstileApi;
   }
 }
+
+const previewResults: Record<UpdatesSignupPreviewState, UpdatesSignupResult> = {
+  idle: { status: "idle", message: "" },
+  submitting: { status: "idle", message: "" },
+  success: { status: "success", message: "Thanks—your signup has been received." },
+  invalid: { status: "error", message: "Enter a valid email address.", field: "email" },
+  error: { status: "error", message: "We couldn’t subscribe you right now. Please try again." },
+};
 
 export default function UpdatesSignupForm({
   enabled,
@@ -28,20 +37,16 @@ export default function UpdatesSignupForm({
     subscribeToUpdates,
     { status: "idle", message: "" },
   );
-  const [email, setEmail] = useState(previewState === "error" ? "you@example.com" : "");
+  const [email, setEmail] = useState(previewState === "invalid" ? "you@example" : "");
   const widget = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string | null>(null);
   const notice = useRef<HTMLDivElement>(null);
-  const status = previewState ?? (pending ? "submitting" : result.status);
-  const displayedResult: UpdatesSignupResult =
-    previewState === "success"
-      ? {
-          status: "success",
-          message: "Thanks—your signup has been received.",
-        }
-      : previewState === "error"
-        ? { status: "error", message: "Enter a valid email address." }
-        : result;
+  const liveStatus = pending ? "submitting" : result.status;
+  const status = previewState === "invalid" ? "error" : (previewState ?? liveStatus);
+  const displayedResult: UpdatesSignupResult = previewState
+    ? previewResults[previewState]
+    : result;
+  const invalidEmail = status === "error" && displayedResult.field === "email";
 
   useEffect(() => {
     if (result.status === "idle") return;
@@ -83,9 +88,10 @@ export default function UpdatesSignupForm({
         ref={notice}
         tabIndex={-1}
         role="status"
-        className="rounded border border-black bg-surface p-4 text-xs leading-relaxed focus:outline-none focus:ring-2 focus:ring-accent"
+        className="flex items-center gap-2 rounded border border-line bg-surface p-4 text-xs leading-relaxed focus:outline-none focus:ring-2 focus:ring-accent"
       >
         {displayedResult.message}
+        <SuccessGhost className="shrink-0 text-primary" />
       </div>
     );
   }
@@ -112,10 +118,10 @@ export default function UpdatesSignupForm({
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             aria-describedby="updates-signup-notice"
-            aria-invalid={status === "error" ? true : undefined}
+            aria-invalid={invalidEmail ? true : undefined}
             placeholder="you@example.com"
             className={`min-w-0 flex-1 rounded border bg-surface-raised px-3 py-2.5 text-xs placeholder:text-placeholder focus:border-transparent focus:outline-none focus:ring-2 disabled:opacity-60 ${
-              status === "error"
+              invalidEmail
                 ? "border-danger-line focus:ring-danger"
                 : "border-line focus:ring-accent"
             }`}

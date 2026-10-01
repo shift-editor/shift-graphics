@@ -13,6 +13,7 @@ const previewStates: UpdatesSignupPreviewState[] = [
   "idle",
   "submitting",
   "success",
+  "invalid",
   "error",
 ];
 
