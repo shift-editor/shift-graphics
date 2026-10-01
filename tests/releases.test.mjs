@@ -116,12 +116,13 @@ test('index omits external editorial images', async () => {
   assert.doesNotMatch(markup, /<img|evil\.example/);
 });
 
-test('release videos render local WebM and MP4 sources with a poster and controls', async () => {
+test('release videos render local WebM and MP4 sources with a poster and a play control', async () => {
   await writeFile(path.join(directory, 'notes.md'), '# A reviewed release\n\n::video{mp4="/releases/0.1.1-alpha.1/curves.mp4" webm="/releases/0.1.1-alpha.1/curves.webm" poster="/releases/0.1.1-alpha.1/curves.jpg" label="Drawing curves in Shift"}');
   const markup = renderToStaticMarkup(await ReleasePage({ params: Promise.resolve({ version: release.version }) }));
   assert.match(markup, /<video[^>]+aria-label="Drawing curves in Shift"/);
   assert.match(markup, /poster="\/releases\/0\.1\.1-alpha\.1\/curves\.jpg"/);
-  assert.match(markup, /controls=""/);
+  assert.doesNotMatch(markup, /controls=""/);
+  assert.match(markup, /<button[^>]+aria-label="Play video"/);
   assert.match(markup, /<source src="\/releases\/0\.1\.1-alpha\.1\/curves\.webm" type="video\/webm"/);
   assert.match(markup, /<source src="\/releases\/0\.1\.1-alpha\.1\/curves\.mp4" type="video\/mp4"/);
 });
