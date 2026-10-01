@@ -78,11 +78,6 @@ export default function ReleaseEntry({
               />
             </div>
           )}
-          {release.prerelease && (
-            <span className="mt-3 inline-block rounded border border-accent/20 px-2 py-0.5 text-xs text-accent">
-              Prerelease
-            </span>
-          )}
         </div>
       </aside>
 
