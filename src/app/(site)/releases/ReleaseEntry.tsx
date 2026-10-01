@@ -1,6 +1,5 @@
-import { ArrowLeft, ArrowRight, ArrowUpRight, Download } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { downloadTargets } from "../../../lib/downloads";
 import { getDisplayDate, type Release } from "../../../lib/releases";
 import { Heading, nextHeadingLevel, type HeadingLevel } from "../../components/Heading";
 import { MarkdownContent } from "../../components/MarkdownContent";
@@ -19,15 +18,6 @@ export default function ReleaseEntry({
 }) {
   const { label: date, dateTime } = getDisplayDate(release);
 
-  const downloads = downloadTargets
-    .map(({ platform, options }) => ({
-      platform,
-      links: options.flatMap(({ label, assetPattern }) => {
-        const asset = release.assets.find(({ name }) => assetPattern.test(name));
-        return asset ? [{ label, asset }] : [];
-      }),
-    }))
-    .filter(({ links }) => links.length > 0);
   const contentHeadingLevel = nextHeadingLevel(titleLevel);
 
   return (
@@ -102,78 +92,6 @@ export default function ReleaseEntry({
         >
           {release.body}
         </MarkdownContent>
-
-        {release.assets.length > 0 && (
-          <section
-            id={view === "page" ? "downloads" : `${release.version}-downloads`}
-            aria-label="Downloads"
-            className="mt-10 scroll-mt-8 overflow-hidden rounded-lg border border-line bg-surface sm:mt-12"
-          >
-          <header className="flex items-start justify-between gap-4 px-5 py-5 sm:px-7 sm:py-6">
-            <div className="min-w-0">
-              <p className="mb-1 text-xs text-muted">Downloads</p>
-              <Heading
-                level={contentHeadingLevel}
-                className="break-words text-xl font-medium tracking-tight"
-              >
-                Shift {release.version}
-              </Heading>
-              {date && release.date && (
-                <time dateTime={release.date} className="mt-1 block text-xs text-muted">
-                  {date}
-                </time>
-              )}
-            </div>
-            <Download aria-hidden="true" className="mt-1 h-5 w-5 shrink-0 text-placeholder" />
-          </header>
-
-          {downloads.length > 0 && (
-            <dl className="border-t border-line-subtle px-5 sm:px-7">
-              {downloads.map(({ platform, links }) => (
-                <div
-                  key={platform}
-                  className="grid grid-cols-[100px_minmax(0,1fr)] items-baseline gap-x-4 gap-y-2 border-b border-line-subtle py-4 text-sm last:border-b-0 sm:grid-cols-[140px_minmax(0,1fr)]"
-                >
-                  <dt className="text-secondary">{platform}</dt>
-                  <dd className="flex flex-wrap gap-x-5 gap-y-2">
-                    {links.map(({ label, asset }) => (
-                      <a
-                        key={asset.url}
-                        href={asset.url}
-                        aria-label={`Download Shift ${release.version} for ${platform}: ${label}`}
-                        className="whitespace-nowrap text-accent hover:opacity-70"
-                      >
-                        {label}
-                      </a>
-                    ))}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          )}
-
-          <footer className="space-y-3 border-t border-line-subtle px-5 py-4 text-xs leading-6 text-muted sm:px-7">
-            <a
-              href={release.source.url}
-              className="inline-flex items-center gap-1.5 text-secondary hover:opacity-70"
-            >
-              All files
-              <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" />
-            </a>
-            <p>
-              Want the latest changes?{" "}
-              <a
-                href="https://github.com/shift-editor/shift/releases/tag/nightly"
-                className="inline-flex items-center gap-1 text-accent hover:opacity-70"
-              >
-                Try Shift Nightly
-                <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" />
-              </a>
-              , our rolling experimental build.
-            </p>
-          </footer>
-          </section>
-        )}
 
         {view === "feed" ? (
           <Link

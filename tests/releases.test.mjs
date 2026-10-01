@@ -183,42 +183,10 @@ test('download target catalog maps every human-facing Nightly installer', () => 
   );
 });
 
-test('recognized release assets become installer links without exposing updater files', async () => {
-  release.assets = [
-    'Shift-0.1.1-alpha.1-macOS-arm64.dmg',
-    'Shift-0.1.1-alpha.1-macOS-x64.dmg',
-    'Shift-0.1.1-alpha.1-Windows-x64-Setup.exe',
-    'Shift-0.1.1-alpha.1-Linux-x64.AppImage',
-    'Shift-0.1.1-alpha.1-Linux-x64.deb',
-    'Shift-0.1.1-alpha.1-Linux-x64.rpm',
-    'Shift-0.1.1-alpha.1-macOS-arm64.zip',
-    'latest-mac.yml',
-    'SHA256SUMS',
-  ].map(name => ({ name, url: `https://github.com/shift-editor/shift/releases/download/${release.tag}/${name}` }));
-  await writeFile(path.join(directory, 'release.json'), JSON.stringify(release));
-  const markup = renderToStaticMarkup(await ReleasePage({ params: Promise.resolve({ version: release.version }) }));
-  for (const asset of release.assets.slice(0, 6)) assert.ok(markup.includes(`href="${asset.url}"`));
-  for (const asset of release.assets.slice(6)) assert.ok(!markup.includes(`href="${asset.url}"`));
-});
-
-test('partial asset lists do not invent unavailable platforms or architectures', async () => {
-  const name = 'Shift-0.1.1-alpha.1-macOS-arm64.dmg';
+test('release pages leave downloads to the homepage', async () => {
+  const name = 'Shift-0.1.1-macOS-arm64.dmg';
   release.assets = [{ name, url: `https://github.com/shift-editor/shift/releases/download/${release.tag}/${name}` }];
   await writeFile(path.join(directory, 'release.json'), JSON.stringify(release));
-  const markup = renderToStaticMarkup(await ReleasePage({ params: Promise.resolve({ version: release.version }) }));
-  assert.match(markup, />Apple Silicon</);
-  assert.doesNotMatch(markup, />Intel x64<|>Windows<|>Linux</);
-});
-
-test('unrecognized assets remain accessible without guessing their platform', async () => {
-  release.assets = [{ name: 'different-future-package.tar.gz', url: `https://github.com/shift-editor/shift/releases/download/${release.tag}/different-future-package.tar.gz` }];
-  await writeFile(path.join(directory, 'release.json'), JSON.stringify(release));
-  const markup = renderToStaticMarkup(await ReleasePage({ params: Promise.resolve({ version: release.version }) }));
-  assert.match(markup, />All files</);
-  assert.doesNotMatch(markup, />macOS<|>Windows<|>Linux \(x64\)<|No downloads/);
-});
-
-test('an assetless published release omits the download card', async () => {
   const markup = renderToStaticMarkup(await ReleasePage({ params: Promise.resolve({ version: release.version }) }));
   assert.doesNotMatch(markup, /Downloads|>All files<|Try Shift Nightly|releases\/download\//);
 });
