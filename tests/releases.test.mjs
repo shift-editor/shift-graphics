@@ -16,7 +16,7 @@ const reactUrl = import.meta.resolve('react');
 registerHooks({
   resolve(specifier, context, nextResolve) {
     if (specifier.endsWith('/lib/downloads') || specifier.endsWith('/lib/releases') || specifier.endsWith('/lib/utils') || specifier.endsWith('/release-notes') || specifier.endsWith('/remark-release-video')) return nextResolve(`${specifier}.ts`, context);
-    if (specifier.endsWith('/components/SiteHeader') || specifier.endsWith('/components/Heading') || specifier.endsWith('/components/MarkdownContent') || specifier.endsWith('/ReleaseVideo') || specifier.endsWith('/ui/Separator') || specifier.endsWith('/ReleaseEntry')) return nextResolve(`${specifier}.tsx`, context);
+    if (specifier.endsWith('/components/SiteHeader') || specifier.endsWith('/components/Heading') || specifier.endsWith('/components/MarkdownContent') || specifier.endsWith('/ReleaseVideo') || specifier.endsWith('/ui/Separator') || specifier.endsWith('/ReleaseEntry') || specifier.endsWith('/ReleaseGhost')) return nextResolve(`${specifier}.tsx`, context);
     let source;
     if (specifier === 'server-only') source = 'export {}';
     if (specifier === 'next/navigation') source = 'export function notFound() { throw new Error("NEXT_NOT_FOUND"); }';
@@ -35,7 +35,7 @@ registerHooks({
   },
 });
 globalThis.fetch = async () => { throw new Error('Network is forbidden in release tests'); };
-const { downloadTargets } = await import('../src/lib/downloads.ts');
+const { downloadLinks, downloadTargets } = await import('../src/lib/downloads.ts');
 const { getReleases } = await import('../src/lib/releases.ts');
 const { default: ReleasesPage } = await import('../src/app/(site)/releases/page.tsx');
 const { default: ReleasePage, generateStaticParams, generateMetadata, dynamicParams } = await import('../src/app/(site)/releases/[version]/page.tsx');
@@ -335,4 +335,19 @@ test('changelog Markdown does not execute MDX, raw HTML, tracking images, or uns
   assert.match(markup, /process.exit\(99\)/);
   assert.doesNotMatch(markup, /<script|javascript:|<img|evil\.example/);
   assert.match(markup, /type="checkbox"/);
+});
+
+test('homepage downloads use the published release and never mix in Nightly', () => {
+  const asset = name => ({ name, url: `https://github.com/shift-editor/shift/releases/download/v0.1.1/${name}` });
+  const links = downloadLinks([asset('Shift-0.1.1-macOS-arm64.dmg'), asset('Shift-0.1.1-Windows-x64-Setup.exe'), asset('latest-mac.yml')]);
+  assert.deepEqual(links.map(({ id, href }) => [id, href]), [
+    ['macos-arm64', 'https://github.com/shift-editor/shift/releases/download/v0.1.1/Shift-0.1.1-macOS-arm64.dmg'],
+    ['windows-x64', 'https://github.com/shift-editor/shift/releases/download/v0.1.1/Shift-0.1.1-Windows-x64-Setup.exe'],
+  ]);
+});
+
+test('homepage downloads fall back to Nightly only when no release is published', () => {
+  const links = downloadLinks(null);
+  assert.equal(links.length, 6);
+  assert.ok(links.every(({ href }) => href.startsWith('https://github.com/shift-editor/shift/releases/download/nightly/')));
 });

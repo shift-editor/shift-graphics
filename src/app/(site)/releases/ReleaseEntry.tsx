@@ -1,11 +1,11 @@
 import { ArrowLeft, ArrowRight, ArrowUpRight, Download } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { downloadTargets } from "../../../lib/downloads";
 import { getDisplayDate, type Release } from "../../../lib/releases";
 import { Heading, nextHeadingLevel, type HeadingLevel } from "../../components/Heading";
 import { MarkdownContent } from "../../components/MarkdownContent";
 import { Separator } from "../../components/ui/Separator";
+import { ReleaseGhost } from "./ReleaseGhost";
 
 
 export default function ReleaseEntry({
@@ -58,15 +58,7 @@ export default function ReleaseEntry({
           </Link>
           {date && (
             <div className="relative mt-3 grid grid-cols-[24px_1fr] items-center gap-x-3">
-              <Image
-                src="/backwards-cap.svg"
-                alt=""
-                width={32}
-                height={32}
-                unoptimized
-                aria-hidden="true"
-                className="relative z-10 h-6 w-6 bg-app object-contain"
-              />
+              <ReleaseGhost />
               {dateTime ? (
                 <time dateTime={dateTime} className="font-mono text-xs text-secondary">
                   {date}
