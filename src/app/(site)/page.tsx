@@ -31,7 +31,12 @@ export default async function Home() {
                 Currently in alpha v{latest.version}
               </Link>
             ) : (
-              "Currently in alpha · Nightly build"
+              <>
+                Currently in alpha ·{" "}
+                <Link href="/downloads/nightly" className="hover:text-accent">
+                  Nightly build
+                </Link>
+              </>
             )}
           </p>
         </div>

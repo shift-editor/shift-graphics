@@ -15,8 +15,8 @@ import ts from 'typescript';
 const reactUrl = import.meta.resolve('react');
 registerHooks({
   resolve(specifier, context, nextResolve) {
-    if (specifier.endsWith('/lib/downloads') || specifier.endsWith('/lib/releases') || specifier.endsWith('/lib/utils') || specifier.endsWith('/release-notes') || specifier.endsWith('/remark-release-video')) return nextResolve(`${specifier}.ts`, context);
-    if (specifier.endsWith('/components/SiteHeader') || specifier.endsWith('/components/Heading') || specifier.endsWith('/components/MarkdownContent') || specifier.endsWith('/ReleaseVideo') || specifier.endsWith('/ui/Separator') || specifier.endsWith('/ReleaseEntry') || specifier.endsWith('/ReleaseGhost')) return nextResolve(`${specifier}.tsx`, context);
+    if (specifier.endsWith('/lib/downloads') || specifier.endsWith('/components/platformIcons') || specifier.endsWith('/lib/releases') || specifier.endsWith('/lib/utils') || specifier.endsWith('/release-notes') || specifier.endsWith('/remark-release-video')) return nextResolve(`${specifier}.ts`, context);
+    if (specifier.endsWith('/components/SiteHeader') || specifier.endsWith('/components/Heading') || specifier.endsWith('/components/MarkdownContent') || specifier.endsWith('/ReleaseVideo') || specifier.endsWith('/ui/Separator') || specifier.endsWith('/ReleaseEntry') || specifier.endsWith('/ReleaseGhost') || specifier.endsWith('/DownloadPanel')) return nextResolve(`${specifier}.tsx`, context);
     let source;
     if (specifier === 'server-only') source = 'export {}';
     if (specifier === 'next/navigation') source = 'export function notFound() { throw new Error("NEXT_NOT_FOUND"); }';
@@ -26,7 +26,7 @@ registerHooks({
     return source === undefined ? nextResolve(specifier, context) : { url: `data:text/javascript,${encodeURIComponent(source)}`, shortCircuit: true };
   },
   load(url, context, nextLoad) {
-    if (url.endsWith('.tsx') && (url.includes('/src/app/(site)/releases/') || url.includes('/src/app/components/'))) {
+    if (url.endsWith('.tsx') && (url.includes('/src/app/(site)/releases/') || url.includes('/src/app/(site)/downloads/') || url.includes('/src/app/components/'))) {
       return { format: 'module', shortCircuit: true, source: ts.transpileModule(readFileSync(new URL(url), 'utf8'), {
         compilerOptions: { jsx: ts.JsxEmit.ReactJSX, module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2020 },
       }).outputText };
@@ -35,7 +35,8 @@ registerHooks({
   },
 });
 globalThis.fetch = async () => { throw new Error('Network is forbidden in release tests'); };
-const { downloadLinks, downloadTargets } = await import('../src/lib/downloads.ts');
+const { downloadLinks, downloadTargets, nightlyDownloadLinks } = await import('../src/lib/downloads.ts');
+const { default: DownloadsPage } = await import('../src/app/(site)/downloads/page.tsx');
 const { getReleases } = await import('../src/lib/releases.ts');
 const { default: ReleasesPage } = await import('../src/app/(site)/releases/page.tsx');
 const { default: ReleasePage, generateStaticParams, generateMetadata, dynamicParams } = await import('../src/app/(site)/releases/[version]/page.tsx');
@@ -319,4 +320,22 @@ test('homepage downloads fall back to Nightly only when no release is published'
   const links = downloadLinks(null);
   assert.equal(links.length, 6);
   assert.ok(links.every(({ href }) => href.startsWith('https://github.com/shift-editor/shift/releases/download/nightly/')));
+});
+
+test('Nightly links cover every installer on the rolling nightly release', () => {
+  const links = nightlyDownloadLinks();
+  assert.deepEqual(links.map(({ href }) => href), downloadTargets.flatMap(({ options }) =>
+    options.map(({ nightlyAssetName }) => `https://github.com/shift-editor/shift/releases/download/nightly/${nightlyAssetName}`)));
+  assert.deepEqual(downloadLinks(null), links);
+});
+
+test('downloads page offers the latest release\'s installers and keeps Nightly out of them', async () => {
+  const asset = name => ({ name, url: `https://github.com/shift-editor/shift/releases/download/${release.tag}/${name}` });
+  release.assets = [asset('Shift-0.1.1-alpha.1-macOS-arm64.dmg'), asset('SHA256SUMS')];
+  await writeFile(path.join(directory, 'release.json'), JSON.stringify(release));
+  const markup = renderToStaticMarkup(await DownloadsPage());
+  const versioned = markup;
+  assert.ok(versioned.includes(`href="${release.assets[0].url}"`));
+  assert.doesNotMatch(markup, /SHA256SUMS/);
+  assert.doesNotMatch(versioned, /releases\/download\/nightly\//);
 });

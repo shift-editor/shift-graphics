@@ -7,6 +7,7 @@ import { Separator } from "./ui/Separator";
 
 const exploreLinks = [
   { label: "About", href: "/" },
+  { label: "Download", href: "/downloads" },
   { label: "Changelog", href: "/releases" },
 ];
 

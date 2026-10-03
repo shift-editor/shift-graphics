@@ -48,6 +48,12 @@ export default async function SiteHeader() {
             <GithubIcon aria-hidden="true" className="h-5 w-5" />
             <span>{starLabel}</span>
           </a>
+          <Link
+            href="/downloads"
+            className="inline-flex h-8 items-center justify-center rounded-md bg-accent px-3.5 text-xs font-medium text-white transition-colors duration-200 hover:bg-accent/90"
+          >
+            Download
+          </Link>
           <div className="sm:hidden">
             <MobileNavMenu />
           </div>

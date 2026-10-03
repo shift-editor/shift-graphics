@@ -75,13 +75,24 @@ export type DownloadLink = {
 export function downloadLinks(
   assets: readonly { name: string; url: string }[] | null,
 ): DownloadLink[] {
+  if (assets === null) return nightlyDownloadLinks();
   return downloadTargets.flatMap(({ platform, icon, options }) =>
-    options.flatMap(({ id, label, assetPattern, nightlyAssetName }) => {
-      if (assets === null) {
-        return [{ id, platform, icon, label, href: `${nightlyDownloadBaseUrl}/${nightlyAssetName}` }];
-      }
+    options.flatMap(({ id, label, assetPattern }) => {
       const asset = assets.find(({ name }) => assetPattern.test(name));
       return asset ? [{ id, platform, icon, label, href: asset.url }] : [];
     }),
+  );
+}
+
+/** Installer links for every option on the rolling Nightly build. */
+export function nightlyDownloadLinks(): DownloadLink[] {
+  return downloadTargets.flatMap(({ platform, icon, options }) =>
+    options.map(({ id, label, nightlyAssetName }) => ({
+      id,
+      platform,
+      icon,
+      label,
+      href: `${nightlyDownloadBaseUrl}/${nightlyAssetName}`,
+    })),
   );
 }

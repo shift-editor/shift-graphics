@@ -1,10 +1,8 @@
 "use client";
 
 import { ChevronDown } from "lucide-react";
-import AppleIcon from "../assets/platforms/apple.svg";
-import LinuxIcon from "../assets/platforms/linux.svg";
-import WindowsIcon from "../assets/platforms/windows.svg";
 import type { DownloadLink } from "../../lib/downloads";
+import { platformIcons } from "./platformIcons";
 import {
   Menu,
   MenuItem,
@@ -13,12 +11,6 @@ import {
   MenuPositioner,
   MenuTrigger,
 } from "./ui/Menu";
-
-const platformIcons = {
-  apple: AppleIcon,
-  windows: WindowsIcon,
-  linux: LinuxIcon,
-};
 
 export default function DownloadMenu({ links }: { links: readonly DownloadLink[] }) {
   const [primary] = links;
