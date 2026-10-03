@@ -31,8 +31,10 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://shift.graphics"),
   title: "Shift",
   description: "A modern font editor built with TypeScript and Rust.",
+  twitter: { card: "summary_large_image" },
   icons: {
     icon: [
       {
