@@ -1,3 +1,5 @@
+import { access } from "node:fs/promises";
+import path from "node:path";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getReleases } from "../../../../lib/releases";
@@ -30,6 +32,11 @@ export async function generateMetadata({
   params: Promise<{ version: string }>;
 }): Promise<Metadata> {
   const { version } = await params;
+  // A hand-made share card, if one was published with the release's images.
+  const ogImage = `/releases/${encodeURIComponent(version)}/og.png`;
+  const hasOgImage = await access(path.join(process.cwd(), "public/releases", version, "og.png"))
+    .then(() => true)
+    .catch(() => false);
 
   return {
     title: `Shift ${version} · Release notes`,
@@ -37,6 +44,12 @@ export async function generateMetadata({
     alternates: {
       canonical: `https://shift.graphics/releases/${encodeURIComponent(version)}`,
     },
+    ...(hasOgImage
+      ? {
+          openGraph: { images: [{ url: ogImage, width: 1200, height: 630 }] },
+          twitter: { card: "summary_large_image", images: [ogImage] },
+        }
+      : {}),
     ...(process.env.NODE_ENV === "development" || process.env.VERCEL_ENV === "preview"
       ? { robots: { index: false, follow: false } }
       : {}),

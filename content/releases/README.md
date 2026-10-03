@@ -15,3 +15,5 @@ Publishing is a manual, approval-required step: refresh the local draft using `-
 `/releases` lists entries and links to `/releases/<version>`, where highlights, downloads, and the full changelog render. The URL uses `release.json`'s exact `version` without a leading `v`, including any prerelease suffix; the original GitHub `tag` is preserved. Each version must be unique. Version pages are generated from approved snapshots at build time; unknown versions return 404.
 
 Both routes read these files locally, with no GitHub request during builds or page visits. Local development and Vercel Preview builds also include `content/drafts/`; production excludes it.
+
+To give a release page its own share card, publish a 1200×630 PNG at `public/releases/<version>/og.png` alongside its other images. Without one, the page uses the generated `/releases` card.

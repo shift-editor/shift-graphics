@@ -6,7 +6,8 @@ export const contentType = "image/png";
 
 export default function Image() {
   return ghostImage({
-    title: "Shift Nightly",
+    title: "Download Nightly",
     subtitle: "Experimental builds from the latest code.",
+    ghost: "nightly",
   });
 }

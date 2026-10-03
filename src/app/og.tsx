@@ -22,16 +22,27 @@ function pixelGhost(
   return { src: svgData(svg.replace(/<svg[^>]*>/, root)), cols, rows };
 }
 
-const [regular, bold, lockupSvg, nightlySvg, appIconPng] = await Promise.all([
+// The release ghost's cap is its white cells above the brim (y < 10);
+// colour them the launcher's blue for the share card only.
+const blueCap = (svg: string) =>
+  svg.replace(/(<path d="M[\d.]+ ([\d.]+)[^"]*" fill=")white"/g, (path, start, y) =>
+    Number(y) < 10 ? `${start}#0C92F4"` : path,
+  );
+
+const [regular, bold, lockupSvg, nightlySvg, releaseSvg, appIconPng] = await Promise.all([
   readFile(join(process.cwd(), "src/app/fonts/og/PublicSans-Regular.ttf")),
   readFile(join(process.cwd(), "src/app/fonts/og/PublicSans-Bold.ttf")),
   readFile(join(process.cwd(), "public/shift-lockup.svg"), "utf8"),
   readFile(join(process.cwd(), "public/nightly-ghost.svg"), "utf8"),
+  readFile(join(process.cwd(), "public/backwards-cap.svg"), "utf8"),
   readFile(join(process.cwd(), "public/shift-app-icon.png"), "base64"),
 ]);
 const lockup = svgData(lockupSvg);
 const appIcon = `data:image/png;base64,${appIconPng}`;
-const nightlyGhost = pixelGhost(nightlySvg, { cell: 31.1623, cols: 13, rows: 10, top: 0 });
+const ghosts = {
+  nightly: pixelGhost(nightlySvg, { cell: 31.1623, cols: 13, rows: 10, top: 0 }),
+  release: pixelGhost(blueCap(releaseSvg), { cell: 32 / 13, cols: 13, rows: 13, top: 1 }),
+};
 
 const fonts = [
   { name: "Public Sans", data: regular, weight: 400 as const },
@@ -94,9 +105,17 @@ export function iconImage({ title, subtitle }: { title: string; subtitle: string
   );
 }
 
-/** A page card: wordmark and title on the left, the Nightly ghost on the right. */
-export function ghostImage({ title, subtitle }: { title: string; subtitle: string }) {
-  const { src, cols, rows } = nightlyGhost;
+/** A page card: wordmark and title on the left, a pixel ghost on the right. */
+export function ghostImage({
+  title,
+  subtitle,
+  ghost,
+}: {
+  title: string;
+  subtitle: string;
+  ghost: keyof typeof ghosts;
+}) {
+  const { src, cols, rows } = ghosts[ghost];
   // A whole number of pixels per cell keeps every cell edge on a pixel.
   const cell = 26;
 
