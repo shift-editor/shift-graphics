@@ -114,7 +114,8 @@ test('index uses local editorial imagery and does not expose private review comm
 test('index omits external editorial images', async () => {
   await writeFile(path.join(directory, 'notes.md'), '# A reviewed release\n\nAn introduction.\n\n![Tracking](https://evil.example/pixel.png)');
   const markup = renderToStaticMarkup(await ReleasesPage());
-  assert.doesNotMatch(markup, /<img|evil\.example/);
+  // Local site artwork (the sidebar ghost) is fine; remote images are not.
+  assert.doesNotMatch(markup, /<img[^>]+src="(https?:)?\/\/|evil\.example/);
 });
 
 test('release videos render local WebM and MP4 sources with a poster and a play control', async () => {

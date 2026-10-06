@@ -51,7 +51,12 @@ export async function getReleases({ draft = false } = {}): Promise<Release[]> {
     throw new Error("Release drafts are available only in development and preview builds");
   }
 
-  const root = path.join(process.cwd(), draft ? "content/drafts" : "content/releases");
+  // Not traced: next.config.ts ships content/ with every route explicitly, so
+  // the tracer need not pull in the whole project to find these files.
+  const root = path.join(
+    /* turbopackIgnore: true */ process.cwd(),
+    draft ? "content/drafts" : "content/releases",
+  );
 
   let entries;
   try {
@@ -81,7 +86,7 @@ export async function getReleases({ draft = false } = {}): Promise<Release[]> {
 
     const contents: string[] = [];
     for (const name of releaseFiles) {
-      const file = path.join(directory, name);
+      const file = path.join(/* turbopackIgnore: true */ directory, name);
       const stat = await lstat(file);
 
       if (!stat.isFile() || stat.size > 1_000_000) {

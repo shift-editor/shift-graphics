@@ -2,6 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  // Release pages and cards read content/ at request time when they revalidate.
+  outputFileTracingIncludes: {
+    "/**": ["./content/**/*"],
+  },
   turbopack: {
     rules: {
       "*.svg": {
