@@ -338,8 +338,10 @@ test('downloads page offers the latest release\'s installers and keeps Nightly o
   await writeFile(path.join(directory, 'release.json'), JSON.stringify(release));
   const markup = renderToStaticMarkup(await DownloadsPage());
   const versioned = markup;
+  // Checksums appear once, as their own link, never as an installer.
+  assert.equal(markup.match(/SHA256SUMS/g).length, 1);
+  assert.match(markup, /<a href="[^"]+\/SHA256SUMS"[^>]*>SHA-256 checksums<\/a>/);
   assert.ok(versioned.includes(`href="${release.assets[0].url}"`));
-  assert.doesNotMatch(markup, /SHA256SUMS/);
   assert.doesNotMatch(versioned, /releases\/download\/nightly\//);
 });
 

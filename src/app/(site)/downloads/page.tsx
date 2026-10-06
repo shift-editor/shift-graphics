@@ -18,6 +18,7 @@ export const metadata = pageMetadata({
 export default async function DownloadsPage() {
   const [release] = await getReleases();
   const links = release ? downloadLinks(release.assets) : [];
+  const checksums = release?.assets.find(({ name }) => name === "SHA256SUMS");
 
   return (
     <div className="release-page flex flex-1 flex-col font-normal">
@@ -45,13 +46,20 @@ export default async function DownloadsPage() {
                     </time>
                   </span>
                 </h2>
-                <Link
-                  href={`/releases/${release.version}`}
-                  className="inline-flex items-center gap-1.5 text-sm text-secondary hover:text-accent"
-                >
-                  Release notes
-                  <ArrowRight aria-hidden="true" className="h-4 w-4" />
-                </Link>
+                <span className="flex items-baseline gap-5 text-sm">
+                  {checksums && (
+                    <a href={checksums.url} className="text-muted hover:text-accent">
+                      SHA-256 checksums
+                    </a>
+                  )}
+                  <Link
+                    href={`/releases/${release.version}`}
+                    className="inline-flex items-center gap-1.5 text-secondary hover:text-accent"
+                  >
+                    Release notes
+                    <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                  </Link>
+                </span>
               </div>
               <div className="mt-4">
                 <DownloadPanel links={links} name={`Shift ${release.version}`} />
