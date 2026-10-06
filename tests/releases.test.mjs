@@ -15,8 +15,8 @@ import ts from 'typescript';
 const reactUrl = import.meta.resolve('react');
 registerHooks({
   resolve(specifier, context, nextResolve) {
-    if (specifier.endsWith('/lib/downloads') || specifier.endsWith('/components/platformIcons') || specifier.endsWith('/lib/releases') || specifier.endsWith('/lib/utils') || specifier.endsWith('/release-notes') || specifier.endsWith('/remark-release-video')) return nextResolve(`${specifier}.ts`, context);
-    if (specifier.endsWith('/components/SiteHeader') || specifier.endsWith('/components/Heading') || specifier.endsWith('/components/MarkdownContent') || specifier.endsWith('/ReleaseVideo') || specifier.endsWith('/ui/Separator') || specifier.endsWith('/ReleaseEntry') || specifier.endsWith('/ReleaseGhost') || specifier.endsWith('/DownloadPanel')) return nextResolve(`${specifier}.tsx`, context);
+    if (specifier.endsWith('/lib/downloads') || specifier.endsWith('/lib/metadata') || specifier.endsWith('/components/platformIcons') || specifier.endsWith('/lib/releases') || specifier.endsWith('/lib/utils') || specifier.endsWith('/release-notes') || specifier.endsWith('/remark-release-video')) return nextResolve(`${specifier}.ts`, context);
+    if (specifier.endsWith('/components/SiteHeader') || specifier.endsWith('/components/Heading') || specifier.endsWith('/components/MarkdownContent') || specifier.endsWith('/ReleaseVideo') || specifier.endsWith('/ui/Separator') || specifier.endsWith('/ReleaseEntry') || specifier.endsWith('/ReleaseGhost') || specifier.endsWith('/DownloadPanel') || specifier.endsWith('/SoftwareJsonLd')) return nextResolve(`${specifier}.tsx`, context);
     let source;
     if (specifier === 'server-only') source = 'export {}';
     if (specifier === 'next/navigation') source = 'export function notFound() { throw new Error("NEXT_NOT_FOUND"); }';

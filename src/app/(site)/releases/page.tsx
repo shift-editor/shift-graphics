@@ -1,14 +1,15 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import { Separator } from "../../components/ui/Separator";
+import { pageMetadata } from "../../../lib/metadata";
 import { getReleases } from "../../../lib/releases";
 import ReleaseEntry from "./ReleaseEntry";
 
-export const metadata: Metadata = {
-  title: "Release notes · Shift",
+export const metadata = pageMetadata({
+  title: "Release notes",
   description:
     "New features, improvements, and fixes in Shift, the free and open-source font editor.",
-};
+  path: "/releases",
+});
 
 export default async function ReleasesPage() {
   const draftsVisible =

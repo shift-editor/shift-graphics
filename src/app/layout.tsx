@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans, Fragment_Mono, Inter } from "next/font/google";
 import localFont from "next/font/local";
+import { openGraph, siteDescription, siteName, siteUrl, twitter } from "../lib/metadata";
 import "./globals.css";
 
 const fragmentMono = Fragment_Mono({
@@ -31,10 +32,11 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://shift.graphics"),
-  title: "Shift",
-  description: "A modern font editor built with TypeScript and Rust.",
-  twitter: { card: "summary_large_image" },
+  metadataBase: new URL(siteUrl),
+  title: { default: "Shift — Free and open-source font editor", template: `%s · ${siteName}` },
+  description: siteDescription,
+  openGraph,
+  twitter,
   icons: {
     icon: [
       {

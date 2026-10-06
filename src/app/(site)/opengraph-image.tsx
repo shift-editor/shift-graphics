@@ -1,4 +1,4 @@
-import { homeImage } from "./og";
+import { homeImage } from "../og";
 
 export const alt = "Shift — a free and open-source font editor";
 export const size = { width: 1200, height: 630 };

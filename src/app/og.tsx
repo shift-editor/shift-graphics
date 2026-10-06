@@ -166,3 +166,12 @@ export function ghostImage({
     </div>,
   );
 }
+
+/** The release notes card, for /releases and release pages without their own. */
+export function releasesImage() {
+  return ghostImage({
+    title: "Release notes",
+    subtitle: "New features, improvements, and fixes in Shift.",
+    ghost: "release",
+  });
+}

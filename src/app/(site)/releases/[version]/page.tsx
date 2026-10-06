@@ -1,26 +1,15 @@
-import { access } from "node:fs/promises";
-import path from "node:path";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getReleases } from "../../../../lib/releases";
+import { pageMetadata } from "../../../../lib/metadata";
+import { releaseSummary } from "../../../../lib/release-notes";
+import { getVisibleReleases } from "../../../../lib/releases";
 import ReleaseEntry from "../ReleaseEntry";
-
-async function allReleases() {
-  const draftsVisible =
-    process.env.NODE_ENV === "development" || process.env.VERCEL_ENV === "preview";
-  const [published, drafts] = await Promise.all([
-    getReleases(),
-    draftsVisible ? getReleases({ draft: true }) : [],
-  ]);
-
-  return [...drafts, ...published];
-}
 
 // Only versions present in approved snapshots or local drafts exist.
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  const releases = await allReleases();
+  const releases = await getVisibleReleases();
   const versions = new Set(releases.map(({ version }) => version));
 
   return [...versions].map((version) => ({ version }));
@@ -32,24 +21,18 @@ export async function generateMetadata({
   params: Promise<{ version: string }>;
 }): Promise<Metadata> {
   const { version } = await params;
-  // A hand-made share card, if one was published with the release's images.
-  const ogImage = `/releases/${encodeURIComponent(version)}/og.png`;
-  const hasOgImage = await access(path.join(process.cwd(), "public/releases", version, "og.png"))
-    .then(() => true)
-    .catch(() => false);
+  const release = (await getVisibleReleases()).find((entry) => entry.version === version);
+  const path = `/releases/${encodeURIComponent(version)}`;
 
   return {
-    title: `Shift ${version} · Release notes`,
-    description: `Features, improvements, downloads, and the full changelog for Shift ${version}.`,
-    alternates: {
-      canonical: `https://shift.graphics/releases/${encodeURIComponent(version)}`,
-    },
-    ...(hasOgImage
-      ? {
-          openGraph: { images: [{ url: ogImage, width: 1200, height: 630 }] },
-          twitter: { card: "summary_large_image", images: [ogImage] },
-        }
-      : {}),
+    ...pageMetadata({
+      title: `${version} release notes`,
+      description:
+        (release && releaseSummary(release.body)) ??
+        `New features, improvements, and fixes in Shift ${version}.`,
+      path,
+      article: { publishedTime: release?.date ?? undefined },
+    }),
     ...(process.env.NODE_ENV === "development" || process.env.VERCEL_ENV === "preview"
       ? { robots: { index: false, follow: false } }
       : {}),
@@ -62,7 +45,7 @@ export default async function ReleasePage({
   params: Promise<{ version: string }>;
 }) {
   const { version } = await params;
-  const releases = await allReleases();
+  const releases = await getVisibleReleases();
   const release = releases.find((entry) => entry.version === version);
 
   if (!release) notFound();

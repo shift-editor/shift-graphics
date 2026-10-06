@@ -2,7 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import DownloadMenu from "../components/DownloadMenu";
 import { downloadLinks } from "../../lib/downloads";
+import { pageMetadata } from "../../lib/metadata";
 import { getReleases } from "../../lib/releases";
+import SoftwareJsonLd from "../components/SoftwareJsonLd";
+
+export const metadata = pageMetadata({ path: "/" });
 
 export default async function Home() {
   const [latest] = await getReleases();
@@ -10,6 +14,7 @@ export default async function Home() {
 
   return (
     <div className="flex flex-1 flex-col">
+      <SoftwareJsonLd version={latest?.version} />
       <main className="flex flex-1 flex-col items-center justify-center gap-10 lg:mt-18">
         <header className="mt-8 px-2 text-center sm:m-0">
           <h1 className="font-sans text-3xl leading-none font-bold tracking-tight text-balance sm:mt-12 sm:tracking-tighter sm:text-[8vw] lg:mt-0 lg:text-display">

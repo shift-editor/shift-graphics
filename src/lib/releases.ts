@@ -208,3 +208,15 @@ export async function getReleases({ draft = false } = {}): Promise<Release[]> {
       b.version.localeCompare(a.version, undefined, { numeric: true }),
   );
 }
+
+/** Published releases, plus local drafts in development and preview builds. */
+export async function getVisibleReleases(): Promise<Release[]> {
+  const draftsVisible =
+    process.env.NODE_ENV === "development" || process.env.VERCEL_ENV === "preview";
+  const [published, drafts] = await Promise.all([
+    getReleases(),
+    draftsVisible ? getReleases({ draft: true }) : [],
+  ]);
+
+  return [...drafts, ...published];
+}

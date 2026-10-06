@@ -42,3 +42,10 @@ export function parseReleaseNotes(markdown: string): {
     body: String(file).trim(),
   };
 }
+
+/** The plain text of a release body's first paragraph, for meta descriptions. */
+export function releaseSummary(body: string): string | undefined {
+  const tree = unified().use(remarkParse).use(remarkGfm).use(remarkDirective).parse(body);
+  const paragraph = tree.children.find((node) => node.type === "paragraph");
+  return paragraph ? toString(paragraph).trim() : undefined;
+}

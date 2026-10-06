@@ -1,17 +1,19 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Separator } from "../../components/ui/Separator";
 import { downloadLinks } from "../../../lib/downloads";
+import { pageMetadata } from "../../../lib/metadata";
 import { getDisplayDate, getReleases } from "../../../lib/releases";
+import SoftwareJsonLd from "../../components/SoftwareJsonLd";
 import DownloadPanel from "./DownloadPanel";
 
-export const metadata: Metadata = {
-  title: "Download Shift",
+export const metadata = pageMetadata({
+  title: "Download",
   description:
     "Download Shift, the free and open-source font editor, for macOS, Windows, and Linux.",
-};
+  path: "/downloads",
+});
 
 export default async function DownloadsPage() {
   const [release] = await getReleases();
@@ -19,6 +21,7 @@ export default async function DownloadsPage() {
 
   return (
     <div className="release-page flex flex-1 flex-col font-normal">
+      <SoftwareJsonLd version={release?.version} />
       <main className="mx-auto mt-16 w-full max-w-[1040px] flex-1 pb-20 sm:mt-24 min-[900px]:px-10">
         <header>
           <h1 className="text-display tracking-tight [font-size:2.625rem]">Download Shift</h1>

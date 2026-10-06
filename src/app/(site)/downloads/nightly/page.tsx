@@ -1,14 +1,15 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import { Separator } from "../../../components/ui/Separator";
 import { nightlyDownloadLinks } from "../../../../lib/downloads";
+import { pageMetadata } from "../../../../lib/metadata";
 import DownloadPanel from "../DownloadPanel";
 
-export const metadata: Metadata = {
-  title: "Shift Nightly",
+export const metadata = pageMetadata({
+  title: "Nightly",
   description:
     "Experimental builds of Shift from the latest development code, for macOS, Windows, and Linux.",
-};
+  path: "/downloads/nightly",
+});
 
 export default function NightlyPage() {
   return (
