@@ -54,7 +54,7 @@ export default async function ReleasesPage() {
               alt="Shift font editor — website artwork"
               width={1200}
               height={800}
-              unoptimized
+              sizes="(min-width: 720px) 672px, 100vw"
               className="h-auto w-full"
             />
             <h2 className="mt-6 text-xl font-medium tracking-tight">

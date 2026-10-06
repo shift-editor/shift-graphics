@@ -52,7 +52,7 @@ export default async function Home() {
           width={2400}
           height={1600}
           className="-mx-6 h-auto w-[calc(100%+3rem)] max-w-none sm:mx-auto sm:w-full sm:max-w-[1200px]"
-          unoptimized
+          sizes="(min-width: 1296px) 1200px, (min-width: 640px) calc(100vw - 6rem), 100vw"
           priority
         />
 

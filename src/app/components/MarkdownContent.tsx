@@ -42,7 +42,7 @@ function MarkdownImage({ src, alt }: ComponentPropsWithoutRef<"img">) {
       alt={alt ?? ""}
       width={1800}
       height={1000}
-      unoptimized
+      sizes="(min-width: 1040px) 760px, (min-width: 900px) calc(100vw - 21rem), 100vw"
       className="my-8 h-auto w-full rounded-sm sm:my-10"
     />
   );
