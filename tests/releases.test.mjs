@@ -37,6 +37,8 @@ registerHooks({
 globalThis.fetch = async () => { throw new Error('Network is forbidden in release tests'); };
 const { detectPlatform, downloadLinks, downloadTargets, nightlyDownloadLinks, primaryDownload } = await import('../src/lib/downloads.ts');
 const { default: DownloadsPage } = await import('../src/app/(site)/downloads/page.tsx');
+const { GET: latestRelease } = await import('../src/app/(site)/releases/latest/route.ts');
+const { GET: releaseFeed } = await import('../src/app/(site)/releases/feed.xml/route.ts');
 const { getReleases } = await import('../src/lib/releases.ts');
 const { default: ReleasesPage } = await import('../src/app/(site)/releases/page.tsx');
 const { default: ReleasePage, generateStaticParams, generateMetadata, dynamicParams } = await import('../src/app/(site)/releases/[version]/page.tsx');
@@ -375,4 +377,21 @@ test('homepage leads with the visitor\'s platform, else the first installer', ()
   const macOnly = links.filter(({ platform }) => platform === 'macOS');
   assert.equal(primaryDownload(macOnly, 'Linux').id, 'macos-arm64');
   assert.equal(primaryDownload([], 'Linux'), undefined);
+});
+
+test('/releases/latest redirects to the newest published release', async () => {
+  const response = await latestRelease();
+  assert.equal(response.status, 307);
+  assert.equal(response.headers.get('location'), '/releases/0.1.1-alpha.1');
+});
+
+test('release feed lists published releases with escaped titles and summaries', async () => {
+  await writeFile(path.join(directory, 'notes.md'), '# Curves & <components>\n\nDraw "smooth" curves.');
+  const response = await releaseFeed();
+  assert.match(response.headers.get('content-type'), /application\/rss\+xml/);
+  const xml = await response.text();
+  assert.match(xml, /<title>Shift 0\.1\.1-alpha\.1: Curves &amp; &lt;components&gt;<\/title>/);
+  assert.match(xml, /<link>https:\/\/shift\.graphics\/releases\/0\.1\.1-alpha\.1<\/link>/);
+  assert.match(xml, /<description>Draw &quot;smooth&quot; curves\.<\/description>/);
+  assert.match(xml, /<pubDate>Sun, 06 Sep 2026 12:00:00 GMT<\/pubDate>/);
 });

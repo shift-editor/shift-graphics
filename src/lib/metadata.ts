@@ -28,7 +28,11 @@ export function pageMetadata({
   return {
     ...(title ? { title } : {}),
     description,
-    alternates: { canonical: `${siteUrl}${path}` },
+    alternates: {
+      canonical: `${siteUrl}${path}`,
+      // Lets feed readers find the release feed from any page.
+      types: { "application/rss+xml": `${siteUrl}/releases/feed.xml` },
+    },
     openGraph: {
       ...openGraph,
       url: `${siteUrl}${path}`,
