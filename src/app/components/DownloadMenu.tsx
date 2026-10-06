@@ -1,7 +1,8 @@
 "use client";
 
 import { ChevronDown } from "lucide-react";
-import type { DownloadLink } from "../../lib/downloads";
+import { useSyncExternalStore } from "react";
+import { detectPlatform, primaryDownload, type DownloadLink } from "../../lib/downloads";
 import { platformIcons } from "./platformIcons";
 import {
   Menu,
@@ -12,8 +13,20 @@ import {
   MenuTrigger,
 } from "./ui/Menu";
 
+// The platform never changes while the page is open, so there is nothing to subscribe to.
+const subscribe = () => () => {};
+
+function browserPlatform() {
+  const { userAgent, maxTouchPoints } = navigator;
+  const uaPlatform = (navigator as Navigator & { userAgentData?: { platform?: string } })
+    .userAgentData?.platform;
+  return detectPlatform({ userAgent, uaPlatform, maxTouchPoints });
+}
+
 export default function DownloadMenu({ links }: { links: readonly DownloadLink[] }) {
-  const [primary] = links;
+  // The server renders the first link; the browser then leads with its own platform.
+  const platform = useSyncExternalStore(subscribe, browserPlatform, () => null);
+  const primary = primaryDownload(links, platform);
   if (!primary) return null;
   const PrimaryIcon = platformIcons[primary.icon];
 

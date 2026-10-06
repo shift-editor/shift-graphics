@@ -96,3 +96,38 @@ export function nightlyDownloadLinks(): DownloadLink[] {
     })),
   );
 }
+
+export type Platform = (typeof downloadTargets)[number]["platform"];
+
+/**
+ * The desktop platform a browser runs on, or `null` for phones, tablets, and
+ * anything unrecognised. Pass `navigator.userAgentData.platform` when the
+ * browser has it, and `navigator.maxTouchPoints`, since iPadOS Safari reports
+ * itself as a Mac.
+ */
+export function detectPlatform({
+  userAgent,
+  uaPlatform,
+  maxTouchPoints = 0,
+}: {
+  userAgent: string;
+  uaPlatform?: string;
+  maxTouchPoints?: number;
+}): Platform | null {
+  if (/Android|iPhone|iPad|iPod|Mobile/i.test(userAgent)) return null;
+  const platform = uaPlatform || userAgent;
+  if (/Windows|Win32|Win64/i.test(platform)) return "Windows";
+  if (/Mac/i.test(platform)) return maxTouchPoints > 1 ? null : "macOS";
+  // ChromeOS reports Linux too, but has no Shift build of its own.
+  if (/CrOS|Chrome OS/i.test(platform)) return null;
+  if (/Linux|X11/i.test(platform)) return "Linux";
+  return null;
+}
+
+/** The link to lead with: the platform's first installer, else the first link. */
+export function primaryDownload(
+  links: readonly DownloadLink[],
+  platform: Platform | null,
+): DownloadLink | undefined {
+  return links.find((link) => link.platform === platform) ?? links[0];
+}

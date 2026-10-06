@@ -35,7 +35,7 @@ registerHooks({
   },
 });
 globalThis.fetch = async () => { throw new Error('Network is forbidden in release tests'); };
-const { downloadLinks, downloadTargets, nightlyDownloadLinks } = await import('../src/lib/downloads.ts');
+const { detectPlatform, downloadLinks, downloadTargets, nightlyDownloadLinks, primaryDownload } = await import('../src/lib/downloads.ts');
 const { default: DownloadsPage } = await import('../src/app/(site)/downloads/page.tsx');
 const { getReleases } = await import('../src/lib/releases.ts');
 const { default: ReleasesPage } = await import('../src/app/(site)/releases/page.tsx');
@@ -338,4 +338,40 @@ test('downloads page offers the latest release\'s installers and keeps Nightly o
   assert.ok(versioned.includes(`href="${release.assets[0].url}"`));
   assert.doesNotMatch(markup, /SHA256SUMS/);
   assert.doesNotMatch(versioned, /releases\/download\/nightly\//);
+});
+
+const userAgents = {
+  macSafari: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15',
+  macChrome: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+  windowsChrome: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+  windowsFirefox: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0',
+  linuxFirefox: 'Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0',
+  chromeOS: 'Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+  android: 'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36',
+  iPhone: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1',
+};
+
+test('detects the visitor\'s desktop platform and ignores phones and tablets', () => {
+  assert.equal(detectPlatform({ userAgent: userAgents.macSafari }), 'macOS');
+  assert.equal(detectPlatform({ userAgent: userAgents.macChrome, uaPlatform: 'macOS' }), 'macOS');
+  assert.equal(detectPlatform({ userAgent: userAgents.windowsChrome, uaPlatform: 'Windows' }), 'Windows');
+  assert.equal(detectPlatform({ userAgent: userAgents.windowsFirefox }), 'Windows');
+  assert.equal(detectPlatform({ userAgent: userAgents.linuxFirefox }), 'Linux');
+  assert.equal(detectPlatform({ userAgent: userAgents.chromeOS, uaPlatform: 'Chrome OS' }), null);
+  assert.equal(detectPlatform({ userAgent: userAgents.android, uaPlatform: 'Android' }), null);
+  assert.equal(detectPlatform({ userAgent: userAgents.iPhone }), null);
+  // iPadOS Safari sends a Mac user agent; touch support gives it away.
+  assert.equal(detectPlatform({ userAgent: userAgents.macSafari, maxTouchPoints: 5 }), null);
+  assert.equal(detectPlatform({ userAgent: '' }), null);
+});
+
+test('homepage leads with the visitor\'s platform, else the first installer', () => {
+  const links = downloadLinks(null);
+  assert.equal(primaryDownload(links, 'Windows').id, 'windows-x64');
+  assert.equal(primaryDownload(links, 'Linux').id, 'linux-appimage-x64');
+  assert.equal(primaryDownload(links, 'macOS').id, 'macos-arm64');
+  assert.equal(primaryDownload(links, null).id, 'macos-arm64');
+  const macOnly = links.filter(({ platform }) => platform === 'macOS');
+  assert.equal(primaryDownload(macOnly, 'Linux').id, 'macos-arm64');
+  assert.equal(primaryDownload([], 'Linux'), undefined);
 });
