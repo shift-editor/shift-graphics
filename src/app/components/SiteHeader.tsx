@@ -50,7 +50,7 @@ export default async function SiteHeader() {
           </a>
           <Link
             href="/downloads"
-            className="inline-flex h-8 items-center justify-center rounded-md bg-accent px-3.5 text-xs font-medium text-white transition-colors duration-200 hover:bg-accent/90"
+            className="hidden h-8 items-center justify-center rounded-md bg-accent px-3.5 sm:inline-flex text-xs font-medium text-white transition-colors duration-200 hover:bg-accent/90"
           >
             Download
           </Link>

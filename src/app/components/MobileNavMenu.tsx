@@ -28,6 +28,7 @@ export default function MobileNavMenu() {
         <MenuPositioner side="bottom" align="end" sideOffset={8}>
           <MenuPopup className="w-48 min-w-48 font-ui">
             <MenuItem render={<Link href="/" />}>About</MenuItem>
+            <MenuItem render={<Link href="/downloads" />}>Download</MenuItem>
             <MenuItem render={<Link href="/releases" />}>Changelog</MenuItem>
           </MenuPopup>
         </MenuPositioner>
