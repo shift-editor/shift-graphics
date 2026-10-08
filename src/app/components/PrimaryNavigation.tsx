@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 const navLink = "transition-colors hover:text-accent";
 
-type ActiveRoute = "about" | "releases" | null;
+type ActiveRoute = "about" | "releases" | "docs" | null;
 
 export default function PrimaryNavigation() {
   const pathname = usePathname();
@@ -14,7 +14,9 @@ export default function PrimaryNavigation() {
       ? "about"
       : pathname === "/releases" || pathname.startsWith("/releases/")
         ? "releases"
-        : null;
+        : pathname === "/docs" || pathname.startsWith("/docs/")
+          ? "docs"
+          : null;
 
   return (
     <div className="hidden items-center justify-center gap-8 text-xs sm:col-start-2 sm:flex">
@@ -31,6 +33,13 @@ export default function PrimaryNavigation() {
         className={`${navLink} ${activeRoute === "releases" ? "text-accent" : ""}`}
       >
         Changelog
+      </Link>
+      <Link
+        href="/docs"
+        aria-current={activeRoute === "docs" ? "page" : undefined}
+        className={`${navLink} ${activeRoute === "docs" ? "text-accent" : ""}`}
+      >
+        Docs
       </Link>
     </div>
   );

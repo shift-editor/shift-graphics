@@ -1,0 +1,108 @@
+---
+title: Draw and edit glyph outlines
+description: Open a glyph, draw contours with the Pen, and reshape points, curves, and whole contours.
+---
+
+You can draw only in an editable `.shift` font. If you opened a UFO, Designspace, or Glyphs source, [save it as Shift](/docs/get-started/create-or-open-a-font#convert-a-ufo-designspace-or-glyphs-source) first.
+
+In the shortcuts below, <kbd>Cmd</kbd> is the macOS key. On Windows and Linux, use <kbd>Ctrl</kbd> unless the step says otherwise.
+
+## Open a glyph
+
+The font window opens on a grid of glyphs. Click a glyph’s cell to open it in the editor.
+
+To rename a glyph, click the name under its cell.
+
+## Choose a tool
+
+| Tool | Shortcut | Use it to |
+| --- | --- | --- |
+| Select | <kbd>V</kbd> | Select, move, and reshape points and contours |
+| Pen | <kbd>P</kbd> | Draw new contours and add points |
+| Hand | <kbd>H</kbd> | Pan around the glyph |
+| Rectangle | <kbd>R</kbd> | Draw a rectangular contour |
+| Ellipse | <kbd>O</kbd> | Draw an elliptical contour |
+
+Hold <kbd>Space</kbd> to switch to the Hand tool while you drag, whatever tool is selected.
+
+## Draw a contour with the Pen
+
+<Steps>
+<Step>
+Press <kbd>P</kbd> to select the Pen.
+</Step>
+<Step>
+Click to place a corner point. To make a curve, press and drag to pull out its handle instead.
+</Step>
+<Step>
+Keep clicking or dragging to add points. Hold <kbd>Shift</kbd> to snap the direction to 15° steps.
+</Step>
+<Step>
+Click the first point to close the contour. Drag as you close it to shape the final curve.
+</Step>
+</Steps>
+
+To finish without closing the contour, press <kbd>Esc</kbd>.
+
+To add a point to an existing contour, click its outline with the Pen.
+
+## Reshape points and curves
+
+With the Select tool (<kbd>V</kbd>):
+
+- **Move points:** drag them, or nudge them with the arrow keys.
+  - An arrow key moves the selection 1 unit.
+  - <kbd>Shift</kbd>+arrow moves it 10 units.
+  - <kbd>Cmd</kbd>+arrow moves it 100 units.
+- **Switch between smooth and corner:** double-click an on-curve point.
+- **Turn a straight segment into a curve:** <kbd>Cmd</kbd>-click the segment.
+- **Select a whole contour:** <kbd>Cmd</kbd>-double-click one of its segments.
+
+On Windows and Linux, the last two actions use the <kbd>Windows</kbd> or <kbd>Super</kbd> key, not <kbd>Ctrl</kbd>.
+
+## Delete points
+
+- <kbd>Delete</kbd> or <kbd>Backspace</kbd> removes the selected points and refits the curve so the contour stays closed.
+- <kbd>Shift</kbd>+<kbd>Delete</kbd> removes them and leaves a gap in the contour.
+
+## Transform and combine contours
+
+| Action | Shortcut |
+| --- | --- |
+| Flip horizontally | <kbd>Shift</kbd>+<kbd>H</kbd> |
+| Flip vertically | <kbd>Shift</kbd>+<kbd>V</kbd> |
+| Union | <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>U</kbd> |
+| Intersect | <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd> |
+| Subtract | <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd> |
+
+On macOS, <kbd>Alt</kbd> is the <kbd>Option</kbd> (⌥) key.
+
+To reverse a contour’s direction, select it and choose **Glyph ▸ Reverse Selected Contour**.
+
+## Use components
+
+To reuse another glyph’s outline, such as a base letter in an accented glyph, choose **Glyph ▸ Add Component…** (<kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>). To turn components back into ordinary outlines you can edit, choose **Glyph ▸ Decompose Components**.
+
+## Zoom and undo
+
+| Action | Shortcut |
+| --- | --- |
+| Zoom in / out | <kbd>Cmd</kbd>+<kbd>+</kbd> / <kbd>Cmd</kbd>+<kbd>−</kbd> |
+| Fit the glyph in the window | <kbd>Shift</kbd>+<kbd>1</kbd> |
+| Zoom to selection | <kbd>Shift</kbd>+<kbd>2</kbd> |
+| Actual size | <kbd>Shift</kbd>+<kbd>0</kbd> |
+| Undo | <kbd>Cmd</kbd>+<kbd>Z</kbd> |
+| Redo | <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> |
+
+## Not available yet
+
+These aren’t in Shift 0.1.1:
+
+- knife, measure, and guideline tools
+- adding or renaming anchors
+- text proofing, spacing, and kerning
+
+## Next
+
+- [Save and reopen your work](/docs/files/save-and-reopen)
+- [Export a font](/docs/files/export)

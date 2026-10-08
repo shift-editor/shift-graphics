@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { docsSource } from "../lib/docs-source";
 import { siteUrl } from "../lib/metadata";
 import { getReleases } from "../lib/releases";
 
@@ -15,5 +16,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${siteUrl}/releases/${encodeURIComponent(release.version)}`,
       lastModified: release.date ?? undefined,
     })),
+    ...docsSource.getPages().map((page) => ({ url: `${siteUrl}${page.url}` })),
   ];
 }

@@ -1,7 +1,10 @@
+import { createMDX } from "fumadocs-mdx/next";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  // Lets `next dev` serve other devices, e.g. DEV_ORIGINS=192.168.1.120,beelink
+  allowedDevOrigins: process.env.DEV_ORIGINS?.split(","),
   // Release pages and cards read content/ at request time when they revalidate.
   outputFileTracingIncludes: {
     "/**": ["./content/**/*"],
@@ -36,4 +39,6 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+const withMDX = createMDX();
+
+export default withMDX(nextConfig);

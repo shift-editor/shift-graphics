@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "fumadocs-ui/css/neutral.css";
+@import "fumadocs-ui/css/preset.css";
 
 @theme inline {
   --font-mono: var(--font-fragment-mono);
@@ -36,6 +38,26 @@
   --color-danger: #991b1b;
   --color-danger-surface: #fef2f2;
   --color-danger-line: #fca5a5;
+}
+
+/* Fumadocs drives the /docs shell; point its palette at the site's. */
+@theme {
+  --color-fd-background: #ffffff;
+  --color-fd-foreground: #0a0a0a;
+  --color-fd-muted: #fafaf8;
+  --color-fd-muted-foreground: #737373;
+  --color-fd-popover: #ffffff;
+  --color-fd-popover-foreground: #0a0a0a;
+  --color-fd-card: #fafaf8;
+  --color-fd-card-foreground: #0a0a0a;
+  --color-fd-border: #e5e5e5;
+  --color-fd-primary: #0c92f4;
+  --color-fd-primary-foreground: #ffffff;
+  --color-fd-secondary: #fafaf8;
+  --color-fd-secondary-foreground: #1b1b1b;
+  --color-fd-accent: #e5e5e5;
+  --color-fd-accent-foreground: #0a0a0a;
+  --color-fd-ring: #0c92f4;
 }
 
 body {
@@ -174,4 +196,33 @@ body {
 
 .release-changelog pre {
   overflow-x: auto;
+}
+
+/* Search and other dialogs portal out of the shell to <body>. */
+body:has(.docs-shell) {
+  font-family: var(--font-inter), sans-serif;
+}
+
+/* Guides read like release notes: DM Sans copy, Aktiv Grotesk headings. */
+.docs-shell :is(#nd-page, .prose) {
+  font-family: var(--font-dm-sans), sans-serif;
+}
+
+.docs-shell :is(#nd-page h1, .prose > :is(h2, h3, h4)) {
+  font-family: "aktiv-grotesk", sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.docs-shell :is(code, pre, kbd) {
+  font-family: var(--font-fragment-mono), monospace;
+}
+
+.docs-shell .prose kbd {
+  padding: 0.1em 0.4em;
+  border: 1px solid var(--color-fd-border);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: var(--color-fd-muted);
+  box-shadow: none;
+  font-size: 0.85em;
 }

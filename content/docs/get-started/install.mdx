@@ -1,0 +1,120 @@
+---
+title: Install Shift
+description: Download Shift for macOS, Windows, or Linux, and keep it up to date.
+---
+
+Shift runs on macOS (Apple silicon and Intel), Windows (x64), and Linux (x64). Get the latest release from the [Download page](/downloads).
+
+## macOS
+
+<Steps>
+<Step>
+On the [Download page](/downloads), choose **Apple Silicon** or **Intel x64** next to macOS to download a `.dmg` disk image.
+</Step>
+<Step>
+Open the `.dmg` and drag **Shift** into **Applications**.
+</Step>
+<Step>
+Open Shift from **Applications**. macOS builds are signed and notarized, so they open without an extra security step.
+</Step>
+</Steps>
+
+## Windows
+
+<Steps>
+<Step>
+On the [Download page](/downloads), choose **.exe x64** next to Windows.
+</Step>
+<Step>
+Run the installer. It installs Shift for your user account only and doesn’t ask for administrator access.
+</Step>
+</Steps>
+
+<Callout type="warn" title="Windows builds are unsigned">
+  Windows may show a SmartScreen warning when you run the installer. Windows release builds also don’t update themselves yet, so download each new version from the [Download page](/downloads).
+</Callout>
+
+## Linux
+
+Shift is available as `.deb` and `.rpm` packages and as an `.AppImage`. Installed from Shift’s APT or DNF repository, it updates along with the rest of your system.
+
+### Debian and Ubuntu
+
+Install the `.deb` from the [Download page](/downloads). It adds Shift’s signed APT repository, so later versions arrive with your normal upgrades.
+
+```sh
+sudo apt install ./Shift-<version>-Linux-x64.deb
+sudo apt update
+```
+
+Or add the repository first and install from it:
+
+```sh
+sudo install -d -m 755 /etc/apt/keyrings
+curl -fsSL https://packages.shift.graphics/keys/shift-repository.gpg \
+  | sudo tee /etc/apt/keyrings/shift-repository.gpg >/dev/null
+curl -fsSL https://packages.shift.graphics/config/shift.sources \
+  | sudo tee /etc/apt/sources.list.d/shift.sources >/dev/null
+sudo apt update
+sudo apt install shift
+```
+
+`apt remove shift` keeps the repository configured. `apt purge shift` removes it.
+
+### Fedora and RHEL
+
+Add Shift’s DNF repository and install:
+
+```sh
+sudo curl -fsSL https://packages.shift.graphics/config/shift.repo \
+  -o /etc/yum.repos.d/shift.repo
+sudo dnf install shift
+```
+
+### AppImage
+
+Download the `.AppImage`, make it executable, and run it. The AppImage doesn’t update itself.
+
+```sh
+chmod +x Shift-*.AppImage
+./Shift-*.AppImage
+```
+
+## Verify your download
+
+Each release publishes a `SHA256SUMS` file, linked from the [Download page](/downloads) as **SHA-256 checksums**, and a signed copy, `SHA256SUMS.asc`. Download it into the same folder as your file and check:
+
+```sh
+sha256sum --check --ignore-missing SHA256SUMS
+```
+
+On macOS, use `shasum -a 256 -c SHA256SUMS --ignore-missing`.
+
+## Updates
+
+On macOS, Shift checks for updates about 30 seconds after it starts, then every four hours. Nothing downloads without your consent. When an update is available, choose **Download update**, then **Restart and install**.
+
+To check by hand, choose **Shift ▸ Check for Updates…** on macOS, or **Help ▸ Check for Updates…** on Windows and Linux.
+
+| Platform | How Shift updates |
+| --- | --- |
+| macOS | In the app |
+| Windows | Download the new installer from the [Download page](/downloads) |
+| Linux | APT or DNF upgrades; download a new AppImage by hand |
+
+## What you see first
+
+When Shift starts, it shows the launcher:
+
+- **New Font** and **Open Font…** buttons.
+- A **Recent** list of fonts you’ve opened. You can switch between grid and list views.
+
+In a recent font’s **More actions** menu, you can:
+
+- reveal the file (**Reveal in Finder** on macOS, **Show in Folder** on Windows and Linux)
+- **Copy Path**
+- **Remove from Recents**
+
+## Next
+
+- [Create or open a font](/docs/get-started/create-or-open-a-font)

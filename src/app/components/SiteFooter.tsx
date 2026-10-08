@@ -9,6 +9,7 @@ const exploreLinks = [
   { label: "About", href: "/" },
   { label: "Download", href: "/downloads" },
   { label: "Changelog", href: "/releases" },
+  { label: "Docs", href: "/docs" },
 ];
 
 const communityLinks = [

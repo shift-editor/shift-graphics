@@ -30,6 +30,7 @@ export default function MobileNavMenu() {
             <MenuItem render={<Link href="/" />}>About</MenuItem>
             <MenuItem render={<Link href="/downloads" />}>Download</MenuItem>
             <MenuItem render={<Link href="/releases" />}>Changelog</MenuItem>
+            <MenuItem render={<Link href="/docs" />}>Docs</MenuItem>
           </MenuPopup>
         </MenuPositioner>
       </MenuPortal>
