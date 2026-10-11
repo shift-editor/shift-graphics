@@ -27,6 +27,12 @@ export const downloadTargets = [
         assetPattern: /^Shift-.+-Windows-x64-Setup\.exe$/i,
         nightlyAssetName: "Shift-Nightly-Windows-x64-Setup.exe",
       },
+      {
+        id: "windows-arm64",
+        label: ".exe arm64",
+        assetPattern: /^Shift-.+-Windows-arm64-Setup\.exe$/i,
+        nightlyAssetName: "Shift-Nightly-Windows-arm64-Setup.exe",
+      },
     ],
   },
   {
@@ -40,16 +46,34 @@ export const downloadTargets = [
         nightlyAssetName: "Shift-Nightly-Linux-x64.AppImage",
       },
       {
+        id: "linux-appimage-arm64",
+        label: "AppImage arm64",
+        assetPattern: /^Shift-.+-Linux-arm64\.AppImage$/i,
+        nightlyAssetName: "Shift-Nightly-Linux-arm64.AppImage",
+      },
+      {
         id: "linux-deb-x64",
         label: ".deb x64",
         assetPattern: /^Shift-.+-Linux-x64\.deb$/i,
         nightlyAssetName: "Shift-Nightly-Linux-x64.deb",
       },
       {
+        id: "linux-deb-arm64",
+        label: ".deb arm64",
+        assetPattern: /^Shift-.+-Linux-arm64\.deb$/i,
+        nightlyAssetName: "Shift-Nightly-Linux-arm64.deb",
+      },
+      {
         id: "linux-rpm-x64",
         label: ".rpm x64",
         assetPattern: /^Shift-.+-Linux-x64\.rpm$/i,
         nightlyAssetName: "Shift-Nightly-Linux-x64.rpm",
+      },
+      {
+        id: "linux-rpm-arm64",
+        label: ".rpm arm64",
+        assetPattern: /^Shift-.+-Linux-arm64\.rpm$/i,
+        nightlyAssetName: "Shift-Nightly-Linux-arm64.rpm",
       },
     ],
   },
