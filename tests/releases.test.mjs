@@ -181,9 +181,13 @@ test('download target catalog maps every human-facing Nightly installer', () => 
       'Shift-Nightly-macOS-arm64.dmg',
       'Shift-Nightly-macOS-x64.dmg',
       'Shift-Nightly-Windows-x64-Setup.exe',
+      'Shift-Nightly-Windows-arm64-Setup.exe',
       'Shift-Nightly-Linux-x64.AppImage',
+      'Shift-Nightly-Linux-arm64.AppImage',
       'Shift-Nightly-Linux-x64.deb',
+      'Shift-Nightly-Linux-arm64.deb',
       'Shift-Nightly-Linux-x64.rpm',
+      'Shift-Nightly-Linux-arm64.rpm',
     ],
   );
 });
@@ -321,7 +325,7 @@ test('homepage downloads use the published release and never mix in Nightly', ()
 
 test('homepage downloads fall back to Nightly only when no release is published', () => {
   const links = downloadLinks(null);
-  assert.equal(links.length, 6);
+  assert.equal(links.length, 10);
   assert.ok(links.every(({ href }) => href.startsWith('https://github.com/shift-editor/shift/releases/download/nightly/')));
 });
 
