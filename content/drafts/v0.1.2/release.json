@@ -1,0 +1,14 @@
+{
+  "version": "0.1.2",
+  "tag": "v0.1.2",
+  "date": null,
+  "prerelease": false,
+  "source": {
+    "type": "pr",
+    "number": 487,
+    "url": "https://github.com/shift-editor/shift/pull/487",
+    "sha": "d318084cfe8187034bdaa0c1af9d4d0e4f72777d"
+  },
+  "assets": [],
+  "changelogSha256": "13748546b8ec057910db15c8b38006dbabbe1910986ac33ceb8d4b3c40b38cc0"
+}
