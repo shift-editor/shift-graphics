@@ -12,30 +12,30 @@ A document now holds pages, and the canvas shows one at a time. Add, rename, and
 
 Undo and redo switch to the page they change, so you always see what came back. Each page keeps its own pan and zoom, and switching pages or tabs never marks the document unsaved.
 
-::video{mp4="/releases/0.2.0/tabs-pages.mp4" poster="/releases/0.2.0/tabs-pages.jpg" label="Opening glyphs in tabs and adding pages in Shift"}
+::video{mp4="https://releases.shift.graphics/media/v0.2.0/tabs-pages.mp4" poster="https://releases.shift.graphics/media/v0.2.0/tabs-pages.jpg" label="Opening glyphs in tabs and adding pages in Shift"}
 
 ## Proof text, shaped by your font
 
 The glyph you open sits inside a line of text. Choose the **Text** tool (**T**) and type around it: the text reflows as you go, and the glyph you are editing stays editable in place. Back in **Select**, double-click any glyph in the line to edit it, or double-click a component to open its base glyph beside the one you are editing. Press **Escape** to step out one level at a time; at that level, glyphs in the line can be moved, scaled, rotated, and flipped as whole glyphs.
 
-::video{mp4="/releases/0.2.0/type-typing.mp4" poster="/releases/0.2.0/type-typing.jpg" label="Typing proof text in Latin, Arabic and Hangul in Shift"}
+::video{mp4="https://releases.shift.graphics/media/v0.2.0/type-typing.mp4" poster="https://releases.shift.graphics/media/v0.2.0/type-typing.jpg" label="Typing proof text in Latin, Arabic and Hangul in Shift"}
 
 Proof text is shaped with your font's own feature code and pair kerning, so what you type is set as the font will be. Arabic and other right-to-left scripts work, including lines that mix directions: arrow keys move on screen, and clicks land on ligature carets where the font puts them.
 
-::video{mp4="/releases/0.2.0/type-shaping.mp4" poster="/releases/0.2.0/type-shaping.jpg" label="Arabic letters changing form and Hangul jamo composing as they are typed in Shift"}
+::video{mp4="https://releases.shift.graphics/media/v0.2.0/type-shaping.mp4" poster="https://releases.shift.graphics/media/v0.2.0/type-shaping.jpg" label="Arabic letters changing form and Hangul jamo composing as they are typed in Shift"}
 
 The **Text** section of the sidebar sets each run's size, line height, alignment, language, and script. Turn off **Shaping** to see the text one glyph per character.
 
-::video{mp4="/releases/0.2.0/type-bidi.mp4" poster="/releases/0.2.0/type-bidi.jpg" label="Mixed Arabic and Latin proof text realigned from the Text section in Shift"}
+::video{mp4="https://releases.shift.graphics/media/v0.2.0/type-bidi.mp4" poster="https://releases.shift.graphics/media/v0.2.0/type-bidi.jpg" label="Mixed Arabic and Latin proof text realigned from the Text section in Shift"}
 
 
 ## Switch features on and off
 
 The **Features** section lists every feature the proof text can switch, grouped as Ligatures, Letter case, Figures, and so on. Click a feature's dot to turn it on or off for the run, or back to the font's default. Hover a tag to highlight the glyphs it changes in the text, and click it to open a preview of every substitution it makes, from which glyphs can be copied or inserted into the text.
 
-::video{mp4="/releases/0.2.0/ligatures.mp4" poster="/releases/0.2.0/ligatures.jpg" label="Turning ligatures and discretionary ligatures on in the Features section in Shift"}
+::video{mp4="https://releases.shift.graphics/media/v0.2.0/ligatures.mp4" poster="https://releases.shift.graphics/media/v0.2.0/ligatures.jpg" label="Turning ligatures and discretionary ligatures on in the Features section in Shift"}
 
-::video{mp4="/releases/0.2.0/stylistic-sets.mp4" poster="/releases/0.2.0/stylistic-sets.jpg" label="Switching stylistic sets on one at a time in Shift"}
+::video{mp4="https://releases.shift.graphics/media/v0.2.0/stylistic-sets.mp4" poster="https://releases.shift.graphics/media/v0.2.0/stylistic-sets.jpg" label="Switching stylistic sets on one at a time in Shift"}
 
 ## Space glyphs with the Spacing tool
 
@@ -45,7 +45,7 @@ Click a value to type an exact number. **↑** and **↓** step it (**Shift** fo
 
 In kerned text, each sidebearing is still measured against its own glyph's advance, so spacing never disturbs the kern.
 
-::video{mp4="/releases/0.2.0/spacing.mp4" poster="/releases/0.2.0/spacing.jpg" label="Opening a sidebearing with the Spacing tool: every i widens, then it snaps to the opposite sidebearing"}
+::video{mp4="https://releases.shift.graphics/media/v0.2.0/spacing.mp4" poster="https://releases.shift.graphics/media/v0.2.0/spacing.jpg" label="Opening a sidebearing with the Spacing tool: every i widens, then it snaps to the opposite sidebearing"}
 
 ## Kern pairs and groups
 
@@ -57,9 +57,9 @@ Open the kerning groups panel from the **Kerning** section to create, rename, an
 
 Kerning is kept for each master through UFO, Designspace, and Glyphs import, save, and export.
 
-::video{mp4="/releases/0.2.0/kerning.mp4" poster="/releases/0.2.0/kerning.jpg" label="Kerning To and We with the Kerning tool in Shift"}
+::video{mp4="https://releases.shift.graphics/media/v0.2.0/kerning.mp4" poster="https://releases.shift.graphics/media/v0.2.0/kerning.jpg" label="Kerning To and We with the Kerning tool in Shift"}
 
-::video{mp4="/releases/0.2.0/kerning-breathe.mp4" poster="/releases/0.2.0/kerning-breathe.jpg" label="A kern pair following the font's interpolation as the weight changes in Shift"}
+::video{mp4="https://releases.shift.graphics/media/v0.2.0/kerning-breathe.mp4" poster="https://releases.shift.graphics/media/v0.2.0/kerning-breathe.jpg" label="A kern pair following the font's interpolation as the weight changes in Shift"}
 
 ## Anchors and marks
 
@@ -79,7 +79,7 @@ Points you drag with **Select** or place with the **Pen** now snap to the baseli
 
 The tools have moved out of the title bar into a floating bar over the canvas. Drag its grip to dock it to the top, bottom, left, or right edge of the canvas, or double-click the grip to flip it to the opposite edge. It turns to fit the edge and follows the canvas as sidebars open and close.
 
-::video{mp4="/releases/0.2.0/toolbar.mp4" poster="/releases/0.2.0/toolbar.jpg" label="Dragging the floating toolbar to the left, top and right edges of the canvas, then flipping it with a double-click"}
+::video{mp4="https://releases.shift.graphics/media/v0.2.0/toolbar.mp4" poster="https://releases.shift.graphics/media/v0.2.0/toolbar.jpg" label="Dragging the floating toolbar to the left, top and right edges of the canvas, then flipping it with a double-click"}
 
 ## Themes
 
@@ -93,7 +93,7 @@ theme = { mode = "system", light = "catppuccin-latte", dark = "kanagawa" }
 
 Edits to the file apply to every open window without a restart. Drop a base16 palette into `themes/<name>.toml` to add your own theme, and use its `[colors]` table to override any interface or canvas color, from the accent to the selection fill.
 
-::video{mp4="/releases/0.2.0/themes.mp4" poster="/releases/0.2.0/themes.jpg" label="One Shift window changing through several bundled themes"}
+::video{mp4="https://releases.shift.graphics/media/v0.2.0/themes.mp4" poster="https://releases.shift.graphics/media/v0.2.0/themes.jpg" label="One Shift window changing through several bundled themes"}
 
 ## A new launcher, and updates in the window
 
@@ -101,7 +101,7 @@ The launcher has a new layout: your most recent font gets a wide tile with its f
 
 Updates are now offered in a small strip at the bottom of the launcher and editor windows, instead of a separate window. Download, watch it fill, and restart when you are ready.
 
-::video{mp4="/releases/0.2.0/update-strip.mp4" poster="/releases/0.2.0/update-strip.jpg" label="The update strip downloading and offering a restart in Shift"}
+::video{mp4="https://releases.shift.graphics/media/v0.2.0/update-strip.mp4" poster="https://releases.shift.graphics/media/v0.2.0/update-strip.jpg" label="The update strip downloading and offering a restart in Shift"}
 
 ## Shift and agents
 
@@ -113,7 +113,7 @@ Every Shift build bundles `shift-cli`. Choose **Shift → Install Command Line T
 
 In **Settings → Agents**, turn on **Allow agent connections** to let local agents work with the fonts open in Shift over MCP. It is off by default. Agents can read the font and render it, write proof text, add and rename pages, undo and redo, and change the tool, page, and view. They cannot change glyphs, kerning, or files directly.
 
-::video{mp4="/releases/0.2.0/mcp-agent.mp4" poster="/releases/0.2.0/mcp-agent.jpg" label="Claude Code setting proof text in Shift over MCP and reading back the kern"}
+::video{mp4="https://releases.shift.graphics/media/v0.2.0/mcp-agent.mp4" poster="https://releases.shift.graphics/media/v0.2.0/mcp-agent.jpg" label="Claude Code setting proof text in Shift over MCP and reading back the kern"}
 
 ## Smaller improvements
 
@@ -144,4 +144,4 @@ Please continue working on copies and keep your original sources and independent
 
 The Help menu includes **Report a Problem**, **Show Logs**, and **Feedback**. You can also [email me directly](mailto:updates@shift.graphics). Try spacing and kerning a word or two, and tell me what you would reach for next.
 
-<!-- PRIVATE EDITORIAL CHECK: Videos play from public/releases/0.2.0/ for preview; upload them to R2 under media/v0.2.0/ before publishing. Every section has its video except snapping. Imported from PR #487 at 944de7d. After publication, refresh with --pr 487 --tag v0.2.0 and verify date, assets (incl. arm64), signing status, and the "Windows does not update automatically" line. -->
+<!-- PRIVATE EDITORIAL CHECK: Videos are in R2 under media/v0.2.0/. Every section has its video except snapping. Imported from PR #487 at 944de7d. After publication, refresh with --pr 487 --tag v0.2.0 and verify date, assets (incl. arm64), signing status, and the "Windows does not update automatically" line. -->
