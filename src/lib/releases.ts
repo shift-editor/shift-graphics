@@ -2,7 +2,7 @@ import "server-only";
 import { createHash } from "node:crypto";
 import { lstat, readdir, readFile } from "node:fs/promises";
 import path from "node:path";
-import { parseReleaseNotes } from "./release-notes";
+import { displayChangelog, parseReleaseNotes } from "./release-notes";
 
 const releaseFiles = ["release.json", "notes.md", "changelog.md"];
 const releaseDirectoryPattern =
@@ -204,7 +204,7 @@ export async function getReleases({ draft = false } = {}): Promise<Release[]> {
     }
 
     const { title, body } = parseReleaseNotes(notesMarkdown);
-    releases.push({ ...release, directory: entry.name, title, body, changelog, draft });
+    releases.push({ ...release, directory: entry.name, title, body, changelog: displayChangelog(changelog), draft });
   }
 
   return releases.sort(
