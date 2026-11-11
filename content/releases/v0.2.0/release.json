@@ -1,0 +1,99 @@
+{
+  "version": "0.2.0",
+  "tag": "v0.2.0",
+  "date": "2026-11-10T22:04:59.000Z",
+  "prerelease": true,
+  "source": {
+    "type": "release",
+    "number": 440920411,
+    "url": "https://github.com/shift-editor/shift/releases/tag/v0.2.0",
+    "sha": "ee485e084f6f453c575dc2271221c48d27461629"
+  },
+  "assets": [
+    {
+      "name": "SHA256SUMS",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.2.0/SHA256SUMS"
+    },
+    {
+      "name": "SHA256SUMS.asc",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.2.0/SHA256SUMS.asc"
+    },
+    {
+      "name": "Shift-0.2.0-Linux-arm64.AppImage",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.2.0/Shift-0.2.0-Linux-arm64.AppImage"
+    },
+    {
+      "name": "Shift-0.2.0-Linux-arm64.deb",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.2.0/Shift-0.2.0-Linux-arm64.deb"
+    },
+    {
+      "name": "Shift-0.2.0-Linux-arm64.rpm",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.2.0/Shift-0.2.0-Linux-arm64.rpm"
+    },
+    {
+      "name": "Shift-0.2.0-Linux-x64.AppImage",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.2.0/Shift-0.2.0-Linux-x64.AppImage"
+    },
+    {
+      "name": "Shift-0.2.0-Linux-x64.deb",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.2.0/Shift-0.2.0-Linux-x64.deb"
+    },
+    {
+      "name": "Shift-0.2.0-Linux-x64.rpm",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.2.0/Shift-0.2.0-Linux-x64.rpm"
+    },
+    {
+      "name": "Shift-0.2.0-macOS-arm64.dmg",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.2.0/Shift-0.2.0-macOS-arm64.dmg"
+    },
+    {
+      "name": "Shift-0.2.0-macOS-arm64.dmg.blockmap",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.2.0/Shift-0.2.0-macOS-arm64.dmg.blockmap"
+    },
+    {
+      "name": "Shift-0.2.0-macOS-arm64.zip",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.2.0/Shift-0.2.0-macOS-arm64.zip"
+    },
+    {
+      "name": "Shift-0.2.0-macOS-arm64.zip.blockmap",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.2.0/Shift-0.2.0-macOS-arm64.zip.blockmap"
+    },
+    {
+      "name": "Shift-0.2.0-macOS-x64.dmg",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.2.0/Shift-0.2.0-macOS-x64.dmg"
+    },
+    {
+      "name": "Shift-0.2.0-macOS-x64.dmg.blockmap",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.2.0/Shift-0.2.0-macOS-x64.dmg.blockmap"
+    },
+    {
+      "name": "Shift-0.2.0-macOS-x64.zip",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.2.0/Shift-0.2.0-macOS-x64.zip"
+    },
+    {
+      "name": "Shift-0.2.0-macOS-x64.zip.blockmap",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.2.0/Shift-0.2.0-macOS-x64.zip.blockmap"
+    },
+    {
+      "name": "Shift-0.2.0-Windows-arm64-Setup.exe",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.2.0/Shift-0.2.0-Windows-arm64-Setup.exe"
+    },
+    {
+      "name": "Shift-0.2.0-Windows-arm64-Setup.exe.blockmap",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.2.0/Shift-0.2.0-Windows-arm64-Setup.exe.blockmap"
+    },
+    {
+      "name": "Shift-0.2.0-Windows-x64-Setup.exe",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.2.0/Shift-0.2.0-Windows-x64-Setup.exe"
+    },
+    {
+      "name": "Shift-0.2.0-Windows-x64-Setup.exe.blockmap",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.2.0/Shift-0.2.0-Windows-x64-Setup.exe.blockmap"
+    },
+    {
+      "name": "shift-repository.gpg",
+      "url": "https://github.com/shift-editor/shift/releases/download/v0.2.0/shift-repository.gpg"
+    }
+  ],
+  "changelogSha256": "be7914fd43e484dbc17f56a25c2a248f7a2853776bba72b07bfa9b5ef0d5a684"
+}

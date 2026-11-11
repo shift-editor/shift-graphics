@@ -84,6 +84,16 @@ test('renders published prereleases from local snapshots without network', async
   assert.equal(entry.changelog, changelog);
 });
 
+test('shows the breaking-changes heading in sentence case with an emoji', async () => {
+  const breaking = '### ⚠ BREAKING CHANGES\n\n* **editor:** rename a thing\n\n### Features\n\n- Draw ellipses\n';
+  await writeFile(path.join(directory, 'changelog.md'), breaking);
+  await writeFile(path.join(directory, 'release.json'), JSON.stringify({ ...release, changelogSha256: createHash('sha256').update(breaking).digest('hex') }));
+  const [entry] = await getReleases();
+  assert.match(entry.changelog, /^### 💥 Breaking changes$/m);
+  assert.doesNotMatch(entry.changelog, /BREAKING|⚠/);
+  assert.match(entry.changelog, /^### Features$/m);
+});
+
 test('parses the release title and body through Markdown syntax', async () => {
   await writeFile(path.join(directory, 'notes.md'), '# The *first* `Shift` alpha\n\nBody copy.');
   const [entry] = await getReleases();

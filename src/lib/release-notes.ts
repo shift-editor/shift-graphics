@@ -49,3 +49,14 @@ export function releaseSummary(body: string): string | undefined {
   const paragraph = tree.children.find((node) => node.type === "paragraph");
   return paragraph ? toString(paragraph).trim() : undefined;
 }
+
+const breakingChangesHeading = /^(#{1,6})\s+⚠\s*BREAKING CHANGES\s*$/gm;
+
+/**
+ * The changelog as the site shows it. The generated file stays byte-for-byte as
+ * Release Please wrote it (its hash is checked); only the shouty breaking-changes
+ * heading is restyled here.
+ */
+export function displayChangelog(changelog: string): string {
+  return changelog.replace(breakingChangesHeading, "$1 💥 Breaking changes");
+}
