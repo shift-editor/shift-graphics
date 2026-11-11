@@ -28,7 +28,6 @@ The **Text** section of the sidebar sets each run's size, line height, alignment
 
 ::video{mp4="https://releases.shift.graphics/media/v0.2.0/type-bidi.mp4" poster="https://releases.shift.graphics/media/v0.2.0/type-bidi.jpg" label="Mixed Arabic and Latin proof text realigned from the Text section in Shift"}
 
-
 ## Switch features on and off
 
 The **Features** section lists every feature the proof text can switch, grouped as Ligatures, Letter case, Figures, and so on. Click a feature's dot to turn it on or off for the run, or back to the font's default. Hover a tag to highlight the glyphs it changes in the text, and click it to open a preview of every substitution it makes, from which glyphs can be copied or inserted into the text.
@@ -72,8 +71,6 @@ Shift now records each glyph's category and compiles it into GDEF, so glyphs lik
 ## Snap to metrics and points
 
 Points you drag with **Select** or place with the **Pen** now snap to the baseline, x-height, cap height, ascender, and descender, and line up with other on-curve points on screen. Guides show what a point has snapped to, and points resting exactly on a metric line get a soft halo. Hold **Cmd** (**Ctrl** on Windows and Linux) to suspend snapping, or **Alt** to turn it off for the whole drag.
-
-<!-- NO VIDEO YET: snapping. -->
 
 ## A toolbar that floats
 
@@ -143,5 +140,3 @@ Please continue working on copies and keep your original sources and independent
 ## Share feedback
 
 The Help menu includes **Report a Problem**, **Show Logs**, and **Feedback**. You can also [email me directly](mailto:updates@shift.graphics). Try spacing and kerning a word or two, and tell me what you would reach for next.
-
-<!-- PRIVATE EDITORIAL CHECK: Videos are in R2 under media/v0.2.0/. Every section has its video except snapping. Imported from PR #487 at 944de7d. After publication, refresh with --pr 487 --tag v0.2.0 and verify date, assets (incl. arm64), signing status, and the "Windows does not update automatically" line. -->

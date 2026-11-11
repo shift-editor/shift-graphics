@@ -1,3 +1,11 @@
+<!-- shift-preview-notice:start -->
+> [!WARNING]
+> **Alpha:** Work on copies and keep independent backups. The macOS builds are signed and notarized. Windows builds are currently unsigned and may trigger Microsoft SmartScreen. Linux RPMs and the checksum manifest are signed with the Shift repository key. See the [code signing policy](https://github.com/shift-editor/shift/blob/main/CODE_SIGNING_POLICY.md).
+<!-- shift-preview-notice:end -->
+
+## [0.2.0](https://github.com/shift-editor/shift/compare/v0.1.1...v0.2.0) (2026-11-10)
+
+
 ### ⚠ BREAKING CHANGES
 
 * **editor:** type toolIf by the tool's class ([#822](https://github.com/shift-editor/shift/issues/822))
@@ -129,6 +137,7 @@
 * **store:** verify a clean claim before discarding unsaved edits ([3c32807](https://github.com/shift-editor/shift/commit/3c328074ba3739e51caa3cf24818fab7cb37a07a))
 * support Ubuntu 18.04 and RHEL 8, and require macOS 13 ([#617](https://github.com/shift-editor/shift/issues/617)) ([7aef927](https://github.com/shift-editor/shift/commit/7aef927c71bd6baf5bde8b94857982f17d50c077))
 * **text:** lay out zero-width glyphs and marks at their real advance ([#896](https://github.com/shift-editor/shift/issues/896)) ([1f7d317](https://github.com/shift-editor/shift/commit/1f7d317b17a7762ad71e45e1e6211924762500fa))
+* **text:** type on the page you switch to in text mode ([#912](https://github.com/shift-editor/shift/issues/912)) ([f2e113a](https://github.com/shift-editor/shift/commit/f2e113aa0bb9410522dd80559c82038d57c1f04e))
 * **themes:** keep the theme module free of runtime package imports ([b125129](https://github.com/shift-editor/shift/commit/b125129f8d35f44314f5226f52e582c059abdc49))
 * **tools:** apply a queued pointer move before a key's modifiers ([#858](https://github.com/shift-editor/shift/issues/858)) ([de515d3](https://github.com/shift-editor/shift/commit/de515d3dffaf3245ba990cef93e28114182b147e))
 * **ui:** show tooltips above the floating toolbar layer ([#623](https://github.com/shift-editor/shift/issues/623)) ([dcd7ab1](https://github.com/shift-editor/shift/commit/dcd7ab1ad4ca5139cd769b7a8b1069d801c4e4ca))
