@@ -49,8 +49,8 @@ export default async function Home() {
         <Image
           src="/hero.png"
           alt="Shift font editor"
-          width={2400}
-          height={1600}
+          width={2640}
+          height={1620}
           className="-mx-6 h-auto w-[calc(100%+3rem)] max-w-none sm:mx-auto sm:w-full sm:max-w-[1200px]"
           sizes="(min-width: 1296px) 1200px, (min-width: 640px) calc(100vw - 6rem), 100vw"
           priority
